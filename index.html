@@ -2,466 +2,331 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Case Counter Pro — Portafolio</title>
-  <meta name="description" content="+60 representantes. +40,000 registros. Una herramienta que nació desde la trinchera."/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Case Counter Pro</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-    :root{
-      --y:#FFE600;--y2:#FFC400;--b:#2D3277;--dark:#050709;--card:rgba(255,255,255,0.03);
-      --card2:rgba(255,255,255,0.05);--glass:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.06);
-      --text:#F0F0F5;--muted:#888;--dim:#555;--green:#00E676;--orange:#FF9100;--red:#FF5252;
-      --accent:#7C8AFF;--purple:#C084FC;--r:16px;--r2:24px;
-    }
-    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-    html{scroll-behavior:smooth;}
-    body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
-    ::selection{background:rgba(255,230,0,0.2);color:#fff;}
+    :root{--y:#FFE600;--g:#00E676;--b:#2D3277;--p:#C084FC;--a:#60A5FA;--dark:#030507;--glass:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.05);--t:#F2F2F8;--m:#666;--dm:#444;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;scroll-snap-type:y proximity;}
+    body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--t);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+    ::selection{background:rgba(255,230,0,0.15);}
 
-    /* ========== NAV ========== */
-    .nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:999;display:flex;align-items:center;gap:6px;padding:6px;background:rgba(10,10,20,0.7);backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--border);border-radius:50px;transition:all 0.4s;}
-    .nav a{color:var(--muted);text-decoration:none;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:50px;transition:all 0.25s;white-space:nowrap;}
-    .nav a:hover{color:#fff;background:rgba(255,255,255,0.06);}
-    .nav a.logo{color:var(--y);font-weight:800;font-size:13px;padding:8px 18px;}
+    /* ===== NAV ===== */
+    .nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:999;display:flex;gap:2px;padding:4px;background:rgba(3,5,7,0.6);backdrop-filter:blur(30px) saturate(200%);border:1px solid var(--border);border-radius:50px;}
+    .nav a{color:var(--m);text-decoration:none;font-size:11.5px;font-weight:600;padding:8px 16px;border-radius:50px;transition:all 0.3s;letter-spacing:0.3px;}
+    .nav a:hover,.nav a.act{color:#fff;background:rgba(255,255,255,0.08);}
+    .nav .nl{color:var(--y);font-weight:800;font-size:12px;}
 
-    /* ========== HERO — CINEMATIC ========== */
-    .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;overflow:hidden;}
-    .hero-bg{position:absolute;inset:0;z-index:0;}
-    .hero-glow{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.4;}
-    .hero-glow.g1{width:600px;height:600px;background:rgba(255,230,0,0.07);top:-20%;left:-15%;animation:gFloat 15s ease-in-out infinite;}
-    .hero-glow.g2{width:500px;height:500px;background:rgba(124,138,255,0.06);bottom:-15%;right:-10%;animation:gFloat 18s ease-in-out infinite reverse;}
-    .hero-glow.g3{width:350px;height:350px;background:rgba(192,132,252,0.04);top:50%;left:60%;animation:gFloat 12s ease-in-out infinite 3s;}
-    @keyframes gFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(40px,-30px)}66%{transform:translate(-30px,40px)}}
-    .hero-noise{position:absolute;inset:0;opacity:0.015;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
-    .hero-content{position:relative;z-index:2;max-width:800px;}
-    .hero-tag{display:inline-flex;align-items:center;gap:8px;padding:7px 18px;background:rgba(0,230,118,0.06);border:1px solid rgba(0,230,118,0.15);border-radius:50px;font-size:12px;font-weight:600;color:var(--green);margin-bottom:32px;letter-spacing:0.5px;}
-    .hero-tag-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
-    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.8)}}
-    .hero h1{font-size:clamp(40px,7vw,72px);font-weight:900;line-height:1.02;letter-spacing:-2px;margin-bottom:24px;}
-    .hero h1 .hl{background:linear-gradient(135deg,var(--y) 0%,var(--y2) 50%,var(--orange) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .hero-p{font-size:clamp(17px,2.2vw,21px);color:var(--muted);line-height:1.7;max-width:620px;margin:0 auto 48px;font-weight:400;}
-    .hero-p strong{color:var(--text);font-weight:700;}
+    /* ===== FULLSCREEN SECTIONS ===== */
+    .fs{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:80px 24px;}
 
-    /* HERO COUNTERS */
-    .counters{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;margin-bottom:48px;}
-    .counter{text-align:center;position:relative;}
-    .counter-val{font-size:clamp(48px,8vw,80px);font-weight:900;line-height:1;letter-spacing:-3px;background:linear-gradient(180deg,#fff 0%,var(--muted) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .counter-label{font-size:12px;color:var(--dim);font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-top:8px;}
-
-    .hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;transition:all 0.35s;border:none;cursor:pointer;font-family:'Inter',sans-serif;}
+    /* ===== HERO ===== */
+    .hero-bg{position:absolute;inset:0;}
+    .orb{position:absolute;border-radius:50%;filter:blur(100px);will-change:transform;}
+    .orb-1{width:700px;height:700px;background:rgba(255,230,0,0.04);top:-30%;left:-20%;animation:o1 20s ease-in-out infinite;}
+    .orb-2{width:500px;height:500px;background:rgba(96,165,250,0.04);bottom:-20%;right:-15%;animation:o2 25s ease-in-out infinite;}
+    .orb-3{width:400px;height:400px;background:rgba(192,132,252,0.03);top:40%;right:30%;animation:o3 18s ease-in-out infinite;}
+    @keyframes o1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(50px,-40px) scale(1.1)}}
+    @keyframes o2{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,50px)}}
+    @keyframes o3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-30px) scale(0.9)}}
+    .grid-bg{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.015) 1px,transparent 1px);background-size:48px 48px;}
+    .hero-c{position:relative;z-index:2;text-align:center;max-width:900px;}
+    .hero-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 18px;border:1px solid rgba(0,230,118,0.15);border-radius:50px;font-size:11px;font-weight:600;color:var(--g);margin-bottom:36px;background:rgba(0,230,118,0.04);animation:fadeUp .8s ease both;}
+    .hero-dot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:blink 1.5s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .hero-h{font-size:clamp(48px,9vw,96px);font-weight:900;line-height:.95;letter-spacing:-4px;margin-bottom:32px;animation:fadeUp .8s ease .1s both;}
+    .hero-h .hl{background:linear-gradient(135deg,var(--y),#FFC400,var(--y));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:gradShift 5s ease infinite;}
+    @keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+    .hero-sub{font-size:clamp(15px,2vw,19px);color:var(--m);line-height:1.7;max-width:500px;margin:0 auto 48px;font-weight:400;animation:fadeUp .8s ease .2s both;}
+    .hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s ease .3s both;}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;transition:all .4s;border:none;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.3px;}
     .btn-y{background:var(--y);color:#000;}
-    .btn-y:hover{transform:translateY(-3px);box-shadow:0 20px 50px rgba(255,230,0,0.2);}
-    .btn-g{background:var(--glass);color:var(--text);border:1px solid var(--border);backdrop-filter:blur(12px);}
-    .btn-g:hover{border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);transform:translateY(-3px);}
+    .btn-y:hover{box-shadow:0 0 60px rgba(255,230,0,.2);transform:translateY(-3px);}
+    .btn-o{background:transparent;color:var(--t);border:1px solid var(--border);backdrop-filter:blur(12px);}
+    .btn-o:hover{border-color:rgba(255,255,255,.12);transform:translateY(-3px);}
+    .scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp .8s ease .5s both;}
+    .scroll-hint span{font-size:10px;color:var(--dm);font-weight:600;letter-spacing:2px;text-transform:uppercase;}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(180deg,var(--y),transparent);animation:scrollPulse 2s ease infinite;}
+    @keyframes scrollPulse{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
 
-    /* ========== MARQUEE SOCIAL PROOF ========== */
-    .marquee-wrap{padding:48px 0;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(255,255,255,0.01);}
-    .marquee{display:flex;gap:64px;animation:marquee 30s linear infinite;width:max-content;}
-    .marquee-item{display:flex;align-items:center;gap:10px;white-space:nowrap;font-size:14px;color:var(--dim);font-weight:600;}
-    .marquee-item span{font-size:20px;}
-    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    /* ===== NUMBERS SECTION ===== */
+    .nums{background:linear-gradient(180deg,var(--dark),#060810);}
+    .nums-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;max-width:900px;width:100%;}
+    .num-card{text-align:center;padding:60px 20px;position:relative;border:1px solid var(--border);}
+    .num-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,230,0,.02),transparent 70%);opacity:0;transition:.4s;}
+    .num-card:hover::before{opacity:1;}
+    .num-v{font-size:clamp(56px,10vw,88px);font-weight:900;line-height:1;letter-spacing:-3px;background:linear-gradient(180deg,#fff 30%,var(--dm) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .num-l{font-size:11px;color:var(--dm);font-weight:600;text-transform:uppercase;letter-spacing:3px;margin-top:12px;}
+    .num-sub{font-size:13px;color:var(--m);margin-top:6px;font-weight:500;}
 
-    /* ========== SECTIONS ========== */
-    .s{padding:120px 24px;position:relative;}
-    .s-inner{max-width:1100px;margin:0 auto;}
-    .s-head{text-align:center;margin-bottom:64px;}
-    .s-tag{display:inline-block;padding:6px 16px;background:rgba(255,230,0,0.06);border:1px solid rgba(255,230,0,0.1);border-radius:50px;font-size:11px;font-weight:700;color:var(--y);text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;}
-    .s-title{font-size:clamp(32px,5vw,52px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;margin-bottom:16px;}
-    .s-sub{font-size:17px;color:var(--muted);max-width:560px;margin:0 auto;line-height:1.7;}
-    .s-divider{position:relative;padding:0 24px;}
-    .s-divider::before{content:'';display:block;max-width:1100px;margin:0 auto;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);}
+    /* ===== MARQUEE ===== */
+    .mq{padding:20px 0;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(255,255,255,.005);}
+    .mq-track{display:flex;gap:80px;animation:mq 35s linear infinite;width:max-content;}
+    .mq-i{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--dm);font-weight:600;white-space:nowrap;}
+    .mq-i span{font-size:18px;}
+    @keyframes mq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-    /* ========== GLASS CARDS ========== */
-    .g-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
-    .g-card{position:relative;padding:36px;background:var(--glass);border:1px solid var(--border);border-radius:var(--r2);transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);overflow:hidden;backdrop-filter:blur(8px);}
-    .g-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--y),transparent);opacity:0;transition:0.4s;}
-    .g-card:hover{transform:translateY(-8px);border-color:rgba(255,230,0,0.12);box-shadow:0 24px 60px rgba(0,0,0,0.4);}
-    .g-card:hover::before{opacity:1;}
-    .g-ico{font-size:48px;margin-bottom:20px;display:block;}
-    .g-t{font-size:19px;font-weight:800;margin-bottom:10px;}
-    .g-d{font-size:14px;color:var(--muted);line-height:1.7;}
+    /* ===== VISUAL CARDS ===== */
+    .vc-section{padding:120px 24px;}
+    .vc-inner{max-width:1100px;margin:0 auto;}
+    .vc-head{text-align:center;margin-bottom:72px;}
+    .vc-tag{display:inline-block;padding:5px 16px;border:1px solid rgba(255,230,0,.1);border-radius:50px;font-size:10px;font-weight:700;color:var(--y);text-transform:uppercase;letter-spacing:2.5px;margin-bottom:20px;}
+    .vc-title{font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-1.5px;line-height:1.1;}
+    .vc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+    .vc{position:relative;padding:32px 24px;background:var(--glass);border:1px solid var(--border);border-radius:20px;text-align:center;transition:all .5s cubic-bezier(.175,.885,.32,1.275);overflow:hidden;backdrop-filter:blur(4px);}
+    .vc::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(255,230,0,.02));opacity:0;transition:.4s;}
+    .vc:hover{transform:translateY(-12px);border-color:rgba(255,230,0,.1);box-shadow:0 30px 80px rgba(0,0,0,.4);}
+    .vc:hover::after{opacity:1;}
+    .vc-i{font-size:44px;margin-bottom:16px;display:block;position:relative;z-index:2;}
+    .vc-t{font-size:14px;font-weight:700;margin-bottom:6px;position:relative;z-index:2;}
+    .vc-d{font-size:12px;color:var(--dm);line-height:1.5;position:relative;z-index:2;}
 
-    /* ========== STORY SECTION ========== */
-    .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
-    .story-text h3{font-size:28px;font-weight:800;margin-bottom:16px;line-height:1.2;}
-    .story-text p{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:16px;}
-    .story-text .hl2{color:var(--y);font-weight:700;}
-    .story-visual{display:flex;flex-direction:column;gap:12px;}
-    .story-stat{display:flex;align-items:center;gap:16px;padding:20px 24px;background:var(--glass);border:1px solid var(--border);border-radius:var(--r);transition:all 0.3s;}
-    .story-stat:hover{border-color:rgba(255,230,0,0.1);transform:translateX(6px);}
-    .story-stat-ico{font-size:32px;}
-    .story-stat-t{font-size:24px;font-weight:900;color:var(--y);}
-    .story-stat-l{font-size:12px;color:var(--dim);font-weight:600;}
+    /* ===== BENTO GRID ===== */
+    .bento{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(200px,auto);gap:12px;max-width:1100px;margin:0 auto;}
+    .bento-card{position:relative;padding:40px;background:var(--glass);border:1px solid var(--border);border-radius:24px;overflow:hidden;transition:all .4s;display:flex;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(4px);}
+    .bento-card:hover{border-color:rgba(255,230,0,.1);transform:scale(1.02);}
+    .bento-card.span2{grid-column:span 2;}
+    .bento-card.tall{grid-row:span 2;}
+    .bento-glow{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;}
+    .bento-ico{font-size:48px;margin-bottom:16px;}
+    .bento-t{font-size:22px;font-weight:800;margin-bottom:8px;letter-spacing:-.5px;}
+    .bento-d{font-size:13px;color:var(--m);line-height:1.6;}
 
-    /* ========== TIMELINE ========== */
-    .tl{position:relative;padding-left:56px;}
-    .tl::before{content:'';position:absolute;top:0;bottom:0;left:27px;width:2px;background:linear-gradient(180deg,var(--y),var(--purple),var(--accent),transparent);}
-    .tl-item{position:relative;padding:24px 0;border-bottom:1px solid var(--border);}
-    .tl-item:last-child{border-bottom:none;}
-    .tl-num{position:absolute;left:-56px;top:28px;width:54px;height:54px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;background:var(--dark);border:2px solid var(--y);color:var(--y);border-radius:16px;z-index:2;}
-    .tl-item h3{font-size:18px;font-weight:700;margin-bottom:6px;}
-    .tl-item p{font-size:14px;color:var(--muted);line-height:1.7;}
+    /* ===== TIMELINE MINIMAL ===== */
+    .tl-min{display:flex;gap:0;max-width:900px;margin:0 auto;border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+    .tl-step{flex:1;padding:36px 24px;text-align:center;border-right:1px solid var(--border);transition:all .3s;position:relative;}
+    .tl-step:last-child{border-right:none;}
+    .tl-step:hover{background:rgba(255,230,0,.02);}
+    .tl-n{font-size:32px;font-weight:900;color:var(--y);margin-bottom:8px;}
+    .tl-t{font-size:14px;font-weight:700;margin-bottom:4px;}
+    .tl-d{font-size:11px;color:var(--dm);line-height:1.4;}
 
-    /* ========== RESULTS ========== */
-    .res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px;}
-    .res-card{position:relative;display:flex;flex-direction:column;gap:20px;padding:40px;background:var(--glass);border:1px solid var(--border);border-radius:var(--r2);text-decoration:none;color:var(--text);transition:all 0.4s;overflow:hidden;backdrop-filter:blur(8px);}
-    .res-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--y),var(--green));}
-    .res-card::after{content:'';position:absolute;bottom:-80px;right:-80px;width:240px;height:240px;background:radial-gradient(circle,rgba(255,230,0,0.03),transparent);border-radius:50%;transition:all 0.4s;}
-    .res-card:hover{border-color:rgba(255,230,0,0.15);transform:translateY(-8px) scale(1.01);box-shadow:0 30px 80px rgba(0,0,0,0.4);}
-    .res-card:hover::after{transform:scale(1.5);}
-    .res-ico{font-size:56px;z-index:2;}
-    .res-t{font-size:24px;font-weight:800;z-index:2;}
-    .res-d{font-size:15px;color:var(--muted);line-height:1.7;z-index:2;}
-    .res-cta{display:inline-flex;align-items:center;gap:8px;color:var(--y);font-size:15px;font-weight:700;z-index:2;transition:gap 0.3s;}
-    .res-card:hover .res-cta{gap:16px;}
+    /* ===== RESULTS ===== */
+    .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;margin:0 auto;}
+    .res{position:relative;padding:48px 36px;background:var(--glass);border:1px solid var(--border);border-radius:24px;text-decoration:none;color:var(--t);transition:all .4s;overflow:hidden;backdrop-filter:blur(4px);}
+    .res::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--y),var(--g));opacity:0;transition:.3s;}
+    .res:hover{border-color:rgba(255,230,0,.12);transform:translateY(-8px);box-shadow:0 40px 80px rgba(0,0,0,.4);}
+    .res:hover::before{opacity:1;}
+    .res-i{font-size:52px;margin-bottom:20px;}
+    .res-t{font-size:22px;font-weight:800;margin-bottom:10px;letter-spacing:-.5px;}
+    .res-d{font-size:14px;color:var(--m);line-height:1.7;margin-bottom:20px;}
+    .res-cta{color:var(--y);font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;transition:gap .3s;}
+    .res:hover .res-cta{gap:14px;}
 
-    /* ========== SEMÁFORO ========== */
-    .sema{display:flex;gap:20px;flex-wrap:wrap;margin:32px 0;}
-    .sema-i{flex:1;min-width:180px;padding:32px;text-align:center;border-radius:var(--r2);border:1px solid;transition:all 0.3s;background:var(--glass);}
-    .sema-i:hover{transform:translateY(-4px);}
-    .sema-i.g{border-color:rgba(0,230,118,0.3);}
-    .sema-i.o{border-color:rgba(255,145,0,0.3);}
-    .sema-i.r{border-color:rgba(255,82,82,0.3);}
-    .sema-em{font-size:40px;margin-bottom:10px;}
-    .sema-l{font-size:15px;font-weight:700;margin-bottom:4px;}
-    .sema-v{font-size:32px;font-weight:900;}
-    .sema-desc{font-size:12px;color:var(--dim);margin-top:6px;}
+    /* ===== SEMÁFORO MINI ===== */
+    .sem{display:flex;gap:12px;max-width:700px;margin:0 auto 48px;}
+    .sem-i{flex:1;padding:28px 16px;text-align:center;border-radius:20px;border:1px solid var(--border);background:var(--glass);transition:.3s;}
+    .sem-i:hover{transform:translateY(-4px);}
+    .sem-e{font-size:36px;margin-bottom:8px;}
+    .sem-v{font-size:28px;font-weight:900;margin-bottom:2px;}
+    .sem-l{font-size:11px;color:var(--dm);font-weight:600;text-transform:uppercase;letter-spacing:1px;}
 
-    /* ========== TABS ========== */
-    .tab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
-    .tab-c{padding:28px;background:var(--glass);border:1px solid var(--border);border-radius:var(--r2);border-top:3px solid var(--y);transition:all 0.3s;}
-    .tab-c:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.3);border-top-color:var(--green);}
-    .tab-c-h{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-    .tab-c-n{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:var(--y);color:#000;font-size:14px;font-weight:900;border-radius:10px;}
-    .tab-c-t{font-size:16px;font-weight:700;}
-    .tab-c ul{list-style:none;}
-    .tab-c li{font-size:13px;color:var(--muted);padding:7px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;}
-    .tab-c li:last-child{border-bottom:none;}
+    /* ===== FAQ ===== */
+    .faq{max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:8px;}
+    .fi{background:var(--glass);border:1px solid var(--border);border-radius:16px;overflow:hidden;backdrop-filter:blur(4px);transition:.3s;}
+    .fi:hover{border-color:rgba(255,255,255,.06);}
+    .fq{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s;user-select:none;}
+    .fq:hover{color:var(--y);}
+    .fa-r{font-size:12px;transition:transform .3s;color:var(--dm);}
+    .fi.open .fa-r{transform:rotate(180deg);color:var(--y);}
+    .fa{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+    .fi.open .fa{max-height:300px;}
+    .fa-in{padding:0 24px 20px;font-size:13px;color:var(--m);line-height:1.8;}
 
-    /* ========== FAQ ========== */
-    .faq{display:flex;flex-direction:column;gap:10px;max-width:800px;margin:0 auto;}
-    .faq-i{background:var(--glass);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color 0.3s;backdrop-filter:blur(8px);}
-    .faq-i:hover{border-color:rgba(255,255,255,0.08);}
-    .faq-q{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;cursor:pointer;font-size:15px;font-weight:600;transition:0.2s;user-select:none;}
-    .faq-q:hover{color:var(--y);}
-    .faq-arr{font-size:14px;transition:transform 0.3s;color:var(--dim);}
-    .faq-i.open .faq-arr{transform:rotate(180deg);color:var(--y);}
-    .faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
-    .faq-i.open .faq-a{max-height:400px;}
-    .faq-a-in{padding:0 26px 22px;font-size:14px;color:var(--muted);line-height:1.8;}
-
-    /* ========== FOOTER ========== */
+    /* ===== FOOTER ===== */
     .foot{padding:80px 24px;text-align:center;border-top:1px solid var(--border);}
-    .foot-logo{font-size:56px;margin-bottom:12px;}
-    .foot-t{font-size:20px;font-weight:800;color:var(--y);margin-bottom:10px;}
-    .foot-a{font-size:14px;color:var(--muted);margin-bottom:4px;}
-    .foot-a strong{color:var(--text);}
-    .foot-div{width:48px;height:2px;background:var(--border);margin:24px auto;}
-    .foot-stats{font-size:12px;color:var(--dim);letter-spacing:1px;}
+    .foot-e{font-size:48px;margin-bottom:12px;}
+    .foot-t{font-size:18px;font-weight:800;color:var(--y);margin-bottom:8px;letter-spacing:-.5px;}
+    .foot-s{font-size:13px;color:var(--m);margin-bottom:4px;}
+    .foot-s strong{color:var(--t);}
+    .foot-d{width:40px;height:1px;background:var(--border);margin:24px auto;}
+    .foot-b{font-size:10px;color:var(--dm);letter-spacing:1.5px;text-transform:uppercase;}
 
-    /* ========== RESPONSIVE ========== */
-    @media(max-width:768px){
-      .nav{top:12px;gap:2px;padding:4px;}
-      .nav a{font-size:11px;padding:7px 10px;}
-      .hero{min-height:auto;padding:100px 16px 60px;}
-      .counters{gap:24px;}
-      .counter-val{font-size:48px !important;}
-      .s{padding:80px 16px;}
-      .g-grid,.res-grid,.tab-grid{grid-template-columns:1fr;}
-      .story-grid{grid-template-columns:1fr;gap:32px;}
-      .sema{flex-direction:column;}
-      .tl{padding-left:48px;}
-      .tl-num{left:-48px;width:46px;height:46px;}
-      .marquee-wrap{display:none;}
-    }
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:900px){.vc-grid{grid-template-columns:repeat(2,1fr);}.bento{grid-template-columns:1fr;}.bento-card.span2{grid-column:span 1;}.tl-min{flex-direction:column;}.tl-step{border-right:none;border-bottom:1px solid var(--border);}}
+    @media(max-width:600px){.nav{top:12px;padding:3px;gap:1px;}.nav a{font-size:10px;padding:6px 10px;}.vc-grid{grid-template-columns:1fr 1fr;gap:8px;}.nums-grid{grid-template-columns:1fr;}.res-grid{grid-template-columns:1fr;}.sem{flex-direction:column;gap:8px;}.mq{display:none;}}
 
-    /* ========== SCROLL REVEAL ========== */
-    .rv{opacity:0;transform:translateY(40px);transition:all 0.8s cubic-bezier(0.22,1,0.36,1);}
-    .rv.vis{opacity:1;transform:translateY(0);}
-    .rv-d1{transition-delay:0.1s;}.rv-d2{transition-delay:0.2s;}.rv-d3{transition-delay:0.3s;}.rv-d4{transition-delay:0.4s;}
+    /* ===== REVEAL ===== */
+    .rv{opacity:0;transform:translateY(36px);transition:all .8s cubic-bezier(.22,1,.36,1);}
+    .rv.v{opacity:1;transform:translateY(0);}
+    [data-d="1"]{transition-delay:.1s;}[data-d="2"]{transition-delay:.2s;}[data-d="3"]{transition-delay:.3s;}[data-d="4"]{transition-delay:.35s;}
   </style>
 </head>
 <body>
 
-  <!-- NAV PILL -->
-  <nav class="nav">
-    <a href="#top" class="logo">📊 CCP</a>
-    <a href="#story">Historia</a>
-    <a href="#features">Features</a>
-    <a href="#dashboard">Dashboard</a>
-    <a href="#results">Resultados</a>
-    <a href="#faq">FAQ</a>
-  </nav>
+<!-- NAV -->
+<nav class="nav">
+  <a href="#top" class="nl">📊</a>
+  <a href="#nums">Impacto</a>
+  <a href="#feat">Features</a>
+  <a href="#dash">Dashboard</a>
+  <a href="#results">Resultados</a>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero" id="top">
-    <div class="hero-bg">
-      <div class="hero-glow g1"></div><div class="hero-glow g2"></div><div class="hero-glow g3"></div>
-      <div class="hero-noise"></div>
-    </div>
-    <div class="hero-content">
-      <div class="hero-tag"><span class="hero-tag-dot"></span>En producción — Mercado Libre Colombia</div>
-      <h1>Tu día.<br>Tus datos.<br><span class="hl">Tu control.</span></h1>
-      <p class="hero-p">La herramienta que <strong>+60 representantes</strong> eligieron para dejar de trabajar a ciegas. <strong>+40,000 registros</strong> que demuestran que cuando tienes datos en tiempo real, todo cambia.</p>
-      <div class="counters">
-        <div class="counter"><div class="counter-val" data-target="60">0</div><div class="counter-label">Representantes</div></div>
-        <div class="counter"><div class="counter-val" data-target="40000">0</div><div class="counter-label">Registros</div></div>
-        <div class="counter"><div class="counter-val" data-target="10">0</div><div class="counter-label">Equipos</div></div>
-      </div>
-      <div class="hero-ctas">
-        <a href="#results" class="btn btn-y">Ver Resultados Reales →</a>
-        <a href="#story" class="btn btn-g">Conoce la Historia</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee-wrap">
-    <div class="marquee">
-      <div class="marquee-item"><span>📊</span> Case Counter Pro</div>
-      <div class="marquee-item"><span>👥</span> +60 representantes activos</div>
-      <div class="marquee-item"><span>📈</span> +40,000 registros</div>
-      <div class="marquee-item"><span>🏢</span> Publicaciones Mature</div>
-      <div class="marquee-item"><span>📦</span> Envíos Mature</div>
-      <div class="marquee-item"><span>☀️</span> Turno Mañana</div>
-      <div class="marquee-item"><span>🌙</span> Turno Tarde</div>
-      <div class="marquee-item"><span>🏆</span> +10 equipos</div>
-      <div class="marquee-item"><span>⚡</span> Tiempo Real</div>
-      <div class="marquee-item"><span>🧘</span> Modo Foco</div>
-      <div class="marquee-item"><span>📊</span> Case Counter Pro</div>
-      <div class="marquee-item"><span>👥</span> +60 representantes activos</div>
-      <div class="marquee-item"><span>📈</span> +40,000 registros</div>
-      <div class="marquee-item"><span>🏢</span> Publicaciones Mature</div>
-      <div class="marquee-item"><span>📦</span> Envíos Mature</div>
-      <div class="marquee-item"><span>☀️</span> Turno Mañana</div>
-      <div class="marquee-item"><span>🌙</span> Turno Tarde</div>
-      <div class="marquee-item"><span>🏆</span> +10 equipos</div>
-      <div class="marquee-item"><span>⚡</span> Tiempo Real</div>
-      <div class="marquee-item"><span>🧘</span> Modo Foco</div>
+<!-- ===== HERO ===== -->
+<section class="fs" id="top">
+  <div class="hero-bg"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div><div class="grid-bg"></div></div>
+  <div class="hero-c">
+    <div class="hero-pill"><span class="hero-dot"></span>En producción · Mercado Libre</div>
+    <h1 class="hero-h">Tu día.<br><span class="hl">Tu control.</span></h1>
+    <p class="hero-sub">+60 representantes eligieron ver su productividad en tiempo real. +40,000 registros demuestran que funciona.</p>
+    <div class="hero-ctas">
+      <a href="#results" class="btn btn-y">Ver Resultados →</a>
+      <a href="#feat" class="btn btn-o">Explorar</a>
     </div>
   </div>
+  <div class="scroll-hint"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
 
-  <!-- STORY -->
-  <section class="s" id="story">
-    <div class="s-inner">
-      <div class="s-head rv">
-        <div class="s-tag">La Historia</div>
-        <h2 class="s-title">Nació desde la trinchera</h2>
-        <p class="s-sub">No fue una idea de un gerente. Fue la necesidad de un representante que quería saber cómo iba su día sin esperar al día siguiente.</p>
-      </div>
-      <div class="story-grid">
-        <div class="story-text rv">
-          <h3>De una hoja de Excel a un ecosistema completo</h3>
-          <p>En <span class="hl2">agosto de 2025</span>, un representante empezó a contar sus casos manualmente. Pronto, todo el equipo quería lo mismo. Así nació Case Counter Pro.</p>
-          <p>Hoy, <span class="hl2">+60 representantes</span> en <span class="hl2">+10 equipos</span> de Publicaciones y Envíos Mature lo usan cada día. No porque alguien se los impuso, sino porque <strong>les da algo que no tenían: claridad</strong>.</p>
-          <p>Cada registro es una decisión de un representante que eligió tener datos sobre su rendimiento. <span class="hl2">+40,000 registros</span> que cuentan esa historia.</p>
-        </div>
-        <div class="story-visual rv rv-d2">
-          <div class="story-stat"><span class="story-stat-ico">🚀</span><div><div class="story-stat-t">Ago 2025</div><div class="story-stat-l">Primera versión — 1 equipo</div></div></div>
-          <div class="story-stat"><span class="story-stat-ico">📈</span><div><div class="story-stat-t">Dic 2025</div><div class="story-stat-l">3 dashboards creados</div></div></div>
-          <div class="story-stat"><span class="story-stat-ico">🏆</span><div><div class="story-stat-t">Ene 2026</div><div class="story-stat-l">7 equipos activos</div></div></div>
-          <div class="story-stat"><span class="story-stat-ico">🌟</span><div><div class="story-stat-t">Feb 2026</div><div class="story-stat-l">+10 equipos · v3.3 · +40K registros</div></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- MARQUEE -->
+<div class="mq">
+  <div class="mq-track">
+    <div class="mq-i"><span>📊</span>Case Counter Pro</div><div class="mq-i"><span>👥</span>+60 representantes</div><div class="mq-i"><span>📈</span>+40,000 registros</div><div class="mq-i"><span>🏢</span>Publicaciones Mature</div><div class="mq-i"><span>📦</span>Envíos Mature</div><div class="mq-i"><span>🛒</span>Mature Ventas</div><div class="mq-i"><span>☀️</span>Turno Mañana</div><div class="mq-i"><span>🌙</span>Turno Tarde</div><div class="mq-i"><span>🏆</span>+10 equipos</div><div class="mq-i"><span>⚡</span>Tiempo Real</div>
+    <div class="mq-i"><span>📊</span>Case Counter Pro</div><div class="mq-i"><span>👥</span>+60 representantes</div><div class="mq-i"><span>📈</span>+40,000 registros</div><div class="mq-i"><span>🏢</span>Publicaciones Mature</div><div class="mq-i"><span>📦</span>Envíos Mature</div><div class="mq-i"><span>🛒</span>Mature Ventas</div><div class="mq-i"><span>☀️</span>Turno Mañana</div><div class="mq-i"><span>🌙</span>Turno Tarde</div><div class="mq-i"><span>🏆</span>+10 equipos</div><div class="mq-i"><span>⚡</span>Tiempo Real</div>
+  </div>
+</div>
 
-  <div class="s-divider"></div>
+<!-- ===== NUMBERS ===== -->
+<section class="fs nums" id="nums">
+  <div class="nums-grid rv">
+    <div class="num-card"><div class="num-v" data-t="60">0</div><div class="num-l">Representantes</div><div class="num-sub">2 turnos activos</div></div>
+    <div class="num-card"><div class="num-v" data-t="40000">0</div><div class="num-l">Registros</div><div class="num-sub">y creciendo cada día</div></div>
+    <div class="num-card"><div class="num-v" data-t="10">0</div><div class="num-l">Equipos</div><div class="num-sub">en todo Mature</div></div>
+  </div>
+</section>
 
-  <!-- FEATURES -->
-  <section class="s" id="features">
-    <div class="s-inner">
-      <div class="s-head rv">
-        <div class="s-tag">Funcionalidades</div>
-        <h2 class="s-title">Todo lo que necesitas.<br>Nada que te sobre.</h2>
-        <p class="s-sub">Cada feature existe porque alguien del equipo la necesitaba</p>
+  <!-- ===== FEATURES — BENTO ===== -->
+<section class="vc-section" id="feat">
+  <div class="vc-inner">
+    <div class="vc-head rv"><div class="vc-tag">Features</div><h2 class="vc-title">Todo. En un clic.</h2></div>
+    <div class="bento">
+      <div class="bento-card span2 rv" style="background:linear-gradient(135deg,rgba(255,230,0,.03),var(--glass));">
+        <div class="bento-glow" style="width:200px;height:200px;background:rgba(255,230,0,.03);top:-40px;right:-40px;"></div>
+        <div class="bento-ico">📊</div><div class="bento-t">Registro Instantáneo</div><div class="bento-d">Un clic. Tu caso se registra. El +1 flota en pantalla. El contador sube. Sin esperas.</div>
       </div>
-      <div class="g-grid">
-        <div class="g-card rv"><span class="g-ico">📊</span><div class="g-t">Registro Instantáneo</div><div class="g-d">Un clic. Tu caso se registra. El contador sube al instante. Sin esperas, sin recargas. Así de simple.</div></div>
-        <div class="g-card rv rv-d1"><span class="g-ico">🏆</span><div class="g-t">Ranking Tiempo Real</div><div class="g-d">Tu equipo, tu turno, tu posición. Medallas para el Top 3. Actualiza con 🔄 cuando quieras.</div></div>
-        <div class="g-card rv rv-d2"><span class="g-ico">🧘</span><div class="g-t">Modo Foco</div><div class="g-d">Sin ranking. Sin comparaciones. Solo tu progreso, tu meta y un mensaje de calma. Para quienes prefieren concentrarse.</div></div>
-        <div class="g-card rv"><span class="g-ico">🎯</span><div class="g-t">Meta Personalizable</div><div class="g-d">Tu objetivo, tu barra de progreso, tu emoji. Sabe exactamente cuánto falta para cumplir.</div></div>
-        <div class="g-card rv rv-d1"><span class="g-ico">📝</span><div class="g-t">Bloc de Notas</div><div class="g-d">Recordatorios rápidos del turno que se borran a medianoche. Para lo que no puedes olvidar.</div></div>
-        <div class="g-card rv rv-d2"><span class="g-ico">🎨</span><div class="g-t">Hazla Tuya</div><div class="g-d">5 paletas, modo oscuro/claro, 160+ avatares, colores custom. Tu extensión, tu identidad.</div></div>
-        <div class="g-card rv"><span class="g-ico">📜</span><div class="g-t">Historial Completo</div><div class="g-d">Hoy, la semana, el mes o cualquier rango. Filtra, pagina, revisa. Todo accesible.</div></div>
-        <div class="g-card rv rv-d1"><span class="g-ico">🔒</span><div class="g-t">Datos Protegidos</div><div class="g-d">Tus casos nunca se pierden. Sincronización inteligente que nunca resta. Protección contra duplicados.</div></div>
+      <div class="bento-card tall rv" data-d="1" style="background:linear-gradient(180deg,rgba(96,165,250,.03),var(--glass));">
+        <div class="bento-glow" style="width:150px;height:150px;background:rgba(96,165,250,.04);bottom:-30px;left:-30px;"></div>
+        <div class="bento-ico">🏆</div><div class="bento-t">Ranking en Tiempo Real</div><div class="bento-d">Tu equipo. Tu turno. Tu posición. Medallas 🥇🥈🥉 para el Top 3. Actualiza con 🔄 cuando quieras.</div>
       </div>
-    </div>
-  </section>
-
-  <div class="s-divider"></div>
-
-  <!-- CÓMO USARLA -->
-  <section class="s" id="howto">
-    <div class="s-inner">
-      <div class="s-head rv">
-        <div class="s-tag">Guía Rápida</div>
-        <h2 class="s-title">5 pasos.<br>Menos de un minuto.</h2>
+      <div class="bento-card rv" data-d="2" style="background:linear-gradient(135deg,rgba(0,230,118,.02),var(--glass));">
+        <div class="bento-ico">🧘</div><div class="bento-t">Modo Foco</div><div class="bento-d">Sin ranking. Solo tu progreso y un mensaje de calma.</div>
       </div>
-      <div class="tl rv">
-        <div class="tl-item"><div class="tl-num">1</div><h3>Instala</h3><p>Chrome Web Store o archivo ZIP. El ícono 📊 aparece en tu barra.</p></div>
-        <div class="tl-item"><div class="tl-num">2</div><h3>Inicia sesión</h3><p>LDAP de tu líder + tu LDAP. Una sola vez.</p></div>
-        <div class="tl-item"><div class="tl-num">3</div><h3>Registra</h3><p>Case ID + TMC → clic en ON u OFF. Un segundo.</p></div>
-        <div class="tl-item"><div class="tl-num">4</div><h3>Observa</h3><p>Tu barra avanza. Tu ranking se actualiza. Sabes dónde estás.</p></div>
-        <div class="tl-item"><div class="tl-num">5</div><h3>Personaliza</h3><p>Avatar, colores, Modo Foco, notas. Hazla tuya.</p></div>
+      <div class="bento-card rv" data-d="3" style="background:linear-gradient(135deg,rgba(192,132,252,.02),var(--glass));">
+        <div class="bento-ico">🎯</div><div class="bento-t">Tu Meta</div><div class="bento-d">Barra de progreso con emoji personalizable.</div>
+      </div>
+      <div class="bento-card rv" style="background:linear-gradient(135deg,rgba(255,145,0,.02),var(--glass));">
+        <div class="bento-ico">📝</div><div class="bento-t">Notas</div><div class="bento-d">Recordatorios que se borran a medianoche.</div>
+      </div>
+      <div class="bento-card rv" data-d="1" style="background:linear-gradient(135deg,rgba(255,82,82,.02),var(--glass));">
+        <div class="bento-ico">🎨</div><div class="bento-t">Hazla Tuya</div><div class="bento-d">5 paletas · 160+ avatares · Colores custom.</div>
+      </div>
+      <div class="bento-card rv" data-d="2">
+        <div class="bento-ico">📜</div><div class="bento-t">Historial</div><div class="bento-d">Hoy, la semana, cualquier rango. Filtra y pagina.</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <div class="s-divider"></div>
-
-  <!-- DASHBOARD -->
-  <section class="s" id="dashboard">
-    <div class="s-inner">
-      <div class="s-head rv">
-        <div class="s-tag">El Dashboard</div>
-        <h2 class="s-title">Los datos que prueban<br>que funciona</h2>
-        <p class="s-sub">Cruzamos productividad real con registros de la extensión</p>
-      </div>
-      <div style="text-align:center;padding:36px;background:var(--glass);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:40px;backdrop-filter:blur(8px);" class="rv">
-        <div style="font-size:12px;color:var(--dim);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:2px;">Métrica Principal</div>
-        <div style="font-size:clamp(20px,3.5vw,30px);font-weight:900;background:linear-gradient(135deg,var(--y),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Tasa de Uso = Casos Extensión ÷ Casos Cx × 100</div>
-      </div>
-      <div class="sema rv">
-        <div class="sema-i g"><div class="sema-em">🟢</div><div class="sema-l">En Meta</div><div class="sema-v">≥ 80%</div><div class="sema-desc">Excelente</div></div>
-        <div class="sema-i o"><div class="sema-em">🟠</div><div class="sema-l">Atención</div><div class="sema-v">40-79%</div><div class="sema-desc">Oportunidad</div></div>
-        <div class="sema-i r"><div class="sema-em">🔴</div><div class="sema-l">Crítico</div><div class="sema-v">&lt;40%</div><div class="sema-desc">Acompañamiento</div></div>
-      </div>
-      <h3 style="font-size:26px;font-weight:800;text-align:center;margin:56px 0 28px;" class="rv">4 Pantallas. Todo el análisis.</h3>
-      <div class="tab-grid rv">
-        <div class="tab-c"><div class="tab-c-h"><div class="tab-c-n">1</div><div class="tab-c-t">📈 Resumen</div></div><ul><li>📊 5 KPIs principales</li><li>📈 Tendencia vs meta 80%</li><li>🏆 Ranking con medallas</li><li>📸 Captura HD</li></ul></div>
-        <div class="tab-c"><div class="tab-c-h"><div class="tab-c-n">2</div><div class="tab-c-t">📅 Por Día</div></div><ul><li>◀▶ Navegador de días</li><li>📋 Detalle por representante</li><li>📊 Histórico del Mes</li><li>🏅 Comparativa Líderes</li></ul></div>
-        <div class="tab-c"><div class="tab-c-h"><div class="tab-c-n">3</div><div class="tab-c-t">⚡ Tiempo Real</div></div><ul><li>🔴 Refresh cada 60s</li><li>🧠 Insights automáticos</li><li>📊 Distribución horaria</li><li>⚠️ Alertas inactividad</li></ul></div>
-        <div class="tab-c"><div class="tab-c-h"><div class="tab-c-n">4</div><div class="tab-c-t">💡 ¿Por qué?</div></div><ul><li>📊 Análisis por nivel</li><li>🏆 TOP 10 productivos</li><li>📈 Correlación uso↔prod</li><li>💪 Insights y datos</li></ul></div>
-      </div>
+<!-- ===== CÓMO USARLA — MINIMAL TIMELINE ===== -->
+<section class="vc-section" style="padding-top:60px;">
+  <div class="vc-inner">
+    <div class="vc-head rv"><div class="vc-tag">Guía</div><h2 class="vc-title">5 pasos. 1 minuto.</h2></div>
+    <div class="tl-min rv">
+      <div class="tl-step"><div class="tl-n">1</div><div class="tl-t">Instala</div><div class="tl-d">Chrome Store o ZIP</div></div>
+      <div class="tl-step"><div class="tl-n">2</div><div class="tl-t">Login</div><div class="tl-d">LDAP líder + tuyo</div></div>
+      <div class="tl-step"><div class="tl-n">3</div><div class="tl-t">Registra</div><div class="tl-d">Case ID + TMC → clic</div></div>
+      <div class="tl-step"><div class="tl-n">4</div><div class="tl-t">Observa</div><div class="tl-d">Tu progreso crece</div></div>
+      <div class="tl-step"><div class="tl-n">5</div><div class="tl-t">Personaliza</div><div class="tl-d">Avatar, colores, foco</div></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <div class="s-divider"></div>
-
-  <!-- RESULTADOS -->
-  <section class="s" id="results">
-    <div class="s-inner">
-      <div class="s-head rv">
-        <div class="s-tag">🏆 Resultados</div>
-        <h2 class="s-title">No son promesas.<br>Son datos reales.</h2>
-        <p class="s-sub">Dashboards en producción con datos de +60 representantes y +40,000 registros</p>
-      </div>
-      <div class="res-grid rv">
-        <a href="https://script.google.com/a/macros/mercadolibre.com.co/s/AKfycbxFM0KNNbSwyVL7Lrf4rW631tT_gPzzLE8WkhCD3YlOlqRokNbiZDi8vskROLZxkShK/exec" target="_blank" class="res-card">
-          <div class="res-ico">📋</div>
-          <div class="res-t">Dashboard Resumen</div>
-          <div class="res-d">Vista ejecutiva: KPIs, ranking de líderes por turno, tasa de uso del equipo. Todo en una sola pantalla.</div>
-          <div class="res-cta">Ver resultados →</div>
-        </a>
-        <a href="https://script.google.com/a/macros/mercadolibre.com.co/s/AKfycbymiGyX9gRRZM1oge9tY6rR1ohen69BxXAguHpBlViW2NdNxjCFzqfkvF_gMinfQJ1Q/exec" target="_blank" class="res-card">
-          <div class="res-ico">📊</div>
-          <div class="res-t">Dashboard Completo</div>
-          <div class="res-d">Análisis profundo: 4 pestañas, tiempo real, correlación uso ↔ productividad, comparativas y capturas HD.</div>
-          <div class="res-cta">Ver análisis completo →</div>
-        </a>
-      </div>
+<!-- ===== DASHBOARD ===== -->
+<section class="vc-section" id="dash">
+  <div class="vc-inner">
+    <div class="vc-head rv"><div class="vc-tag">Dashboard</div><h2 class="vc-title">Los datos que prueban<br>que funciona</h2></div>
+    <div style="text-align:center;padding:32px;background:var(--glass);border:1px solid var(--border);border-radius:24px;margin-bottom:48px;backdrop-filter:blur(8px);" class="rv">
+      <div style="font-size:10px;color:var(--dm);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;font-weight:700;">Métrica Principal</div>
+      <div style="font-size:clamp(18px,3vw,28px);font-weight:900;background:linear-gradient(135deg,var(--y),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Tasa de Uso = Extensión ÷ Casos Cx × 100</div>
     </div>
-  </section>
-
-  <div class="s-divider"></div>
-
-  <!-- FAQ -->
-  <section class="s" id="faq">
-    <div class="s-inner">
-      <div class="s-head rv">
-        <div class="s-tag">FAQ</div>
-        <h2 class="s-title">Lo que necesitas saber</h2>
-      </div>
-      <div class="faq rv">
-        <div class="faq-i"><div class="faq-q"><span>¿Mis casos se pierden si cierro la extensión?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Nunca. Se guardan en Google Sheets y en tu almacenamiento local. La sincronización inteligente garantiza que nunca se resten. Abres la extensión y todo está ahí.</div></div></div>
-        <div class="faq-i"><div class="faq-q"><span>¿Qué pasa a medianoche?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Contadores a cero. Notas borradas. Historial conservado. Cada día es un lienzo nuevo.</div></div></div>
-        <div class="faq-i"><div class="faq-q"><span>¿Puedo registrar un caso duplicado?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Sí. Te avisa que ya existe y pregunta si quieres continuar. Tú decides.</div></div></div>
-        <div class="faq-i"><div class="faq-q"><span>El ranking me genera ansiedad</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Activa el Modo Foco 👁️. Solo tu progreso. Sin comparaciones. Mensajes de calma. Animación de respiración. Un caso a la vez. 🌿</div></div></div>
-        <div class="faq-i"><div class="faq-q"><span>¿Qué es la Tasa de Uso?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Casos registrados en la extensión ÷ Casos gestionados en el sistema × 100. Meta: ≥80%. 10 casos gestionados, 8 registrados = 80% 🟢.</div></div></div>
-        <div class="faq-i"><div class="faq-q"><span>¿Puedo eliminar un caso por error?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Sí. 🗑️ junto al campo de registro. Ves el detalle, confirmas, eliminado.</div></div></div>
-        <div class="faq-i"><div class="faq-q"><span>¿Quién ve mis datos?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Tu líder a través del dashboard. El ranking es solo para tu equipo. Datos en Google Sheets con acceso controlado.</div></div></div>
-      </div>
+    <div class="sem rv">
+      <div class="sem-i"><div class="sem-e">🟢</div><div class="sem-v">≥80%</div><div class="sem-l">En meta</div></div>
+      <div class="sem-i"><div class="sem-e">🟠</div><div class="sem-v">40-79%</div><div class="sem-l">Atención</div></div>
+      <div class="sem-i"><div class="sem-e">🔴</div><div class="sem-v">&lt;40%</div><div class="sem-l">Crítico</div></div>
     </div>
-  </section>
+    <div class="vc-grid rv">
+      <div class="vc"><span class="vc-i">📈</span><div class="vc-t">Resumen</div><div class="vc-d">KPIs · Tendencia · Ranking · Captura HD</div></div>
+      <div class="vc"><span class="vc-i">📅</span><div class="vc-t">Por Día</div><div class="vc-d">Navegador · Histórico · Comparativa</div></div>
+      <div class="vc"><span class="vc-i">⚡</span><div class="vc-t">Tiempo Real</div><div class="vc-d">Auto-refresh · Insights · Alertas</div></div>
+      <div class="vc"><span class="vc-i">💡</span><div class="vc-t">¿Por qué?</div><div class="vc-d">Correlación · TOP 10 · Análisis</div></div>
+    </div>
+  </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer class="foot">
-    <div class="foot-logo">📊</div>
-    <div class="foot-t">Case Counter Pro</div>
-    <div class="foot-a">Creado por <strong>Juan Sebastián Guerrero Rodríguez</strong></div>
-    <div class="foot-a">Publicaciones Mature · Envíos Mature — Mercado Libre</div>
-    <div class="foot-div"></div>
-    <div class="foot-stats">+60 REPRESENTANTES · +40,000 REGISTROS · +10 EQUIPOS · 2 TURNOS</div>
-  </footer>
+<!-- ===== RESULTADOS ===== -->
+<section class="vc-section" id="results" style="padding-bottom:60px;">
+  <div class="vc-inner">
+    <div class="vc-head rv"><div class="vc-tag">🏆 Resultados</div><h2 class="vc-title">No son promesas.<br>Son datos.</h2></div>
+    <div class="res-grid rv">
+      <a href="https://script.google.com/a/macros/mercadolibre.com.co/s/AKfycbxFM0KNNbSwyVL7Lrf4rW631tT_gPzzLE8WkhCD3YlOlqRokNbiZDi8vskROLZxkShK/exec" target="_blank" class="res">
+        <div class="res-i">📋</div><div class="res-t">Dashboard Resumen</div>
+        <div class="res-d">KPIs principales · Ranking líderes · Tasa de uso por equipo</div>
+        <div class="res-cta">Ver resultados →</div>
+      </a>
+      <a href="https://script.google.com/a/macros/mercadolibre.com.co/s/AKfycbymiGyX9gRRZM1oge9tY6rR1ohen69BxXAguHpBlViW2NdNxjCFzqfkvF_gMinfQJ1Q/exec" target="_blank" class="res">
+        <div class="res-i">📊</div><div class="res-t">Dashboard Completo</div>
+        <div class="res-d">4 pestañas · Tiempo real · Correlación · Capturas HD</div>
+        <div class="res-cta">Ver análisis →</div>
+      </a>
+    </div>
+  </div>
+</section>
 
-  <!-- JAVASCRIPT -->
-  <script>
-    // ========== ANIMATED COUNTERS ==========
-    function animateCounters(){
-      document.querySelectorAll('.counter-val').forEach(function(el){
-        var target=parseInt(el.dataset.target);
-        var duration=2000;
-        var start=0;
-        var startTime=null;
-        var suffix=target>=1000?'K+':'+';
-        var displayTarget=target>=1000?target/1000:target;
+  <!-- ===== FAQ ===== -->
+<section class="vc-section" id="faq" style="padding-top:40px;">
+  <div class="vc-inner">
+    <div class="vc-head rv"><div class="vc-tag">FAQ</div><h2 class="vc-title">Lo esencial</h2></div>
+    <div class="faq rv">
+      <div class="fi"><div class="fq"><span>¿Mis casos se pierden si cierro la extensión?</span><span class="fa-r">▼</span></div><div class="fa"><div class="fa-in">Nunca. Se guardan en Google Sheets y local. La sincronización nunca resta datos.</div></div></div>
+      <div class="fi"><div class="fq"><span>¿Qué pasa a medianoche?</span><span class="fa-r">▼</span></div><div class="fa"><div class="fa-in">Contadores a cero. Notas borradas. Historial conservado. Nuevo día, nuevo lienzo.</div></div></div>
+      <div class="fi"><div class="fq"><span>¿El ranking me genera ansiedad?</span><span class="fa-r">▼</span></div><div class="fa"><div class="fa-in">Modo Foco 👁️. Solo tu progreso. Sin comparaciones. Mensajes de calma. Un caso a la vez. 🌿</div></div></div>
+      <div class="fi"><div class="fq"><span>¿Puedo eliminar un caso por error?</span><span class="fa-r">▼</span></div><div class="fa"><div class="fa-in">Sí. 🗑️ junto al registro. Ves el detalle, confirmas, eliminado.</div></div></div>
+      <div class="fi"><div class="fq"><span>¿Qué es la Tasa de Uso?</span><span class="fa-r">▼</span></div><div class="fa"><div class="fa-in">Casos extensión ÷ Casos totales × 100. Meta: ≥80%.</div></div></div>
+    </div>
+  </div>
+</section>
 
-        function step(timestamp){
-          if(!startTime)startTime=timestamp;
-          var progress=Math.min((timestamp-startTime)/duration,1);
-          var ease=1-Math.pow(1-progress,4);
-          var current=Math.floor(ease*displayTarget);
-          el.textContent=target>=1000?current+'K+':current+'+';
-          if(progress<1)requestAnimationFrame(step);
-          else el.textContent=target>=1000?(target/1000)+'K+':target+'+';
-        }
-        requestAnimationFrame(step);
-      });
-    }
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="foot-e">📊</div>
+  <div class="foot-t">Case Counter Pro</div>
+  <div class="foot-s">Creado por <strong>Juan Sebastián Guerrero Rodríguez</strong></div>
+  <div class="foot-s">Publicaciones Mature · Envíos Mature · Mature Ventas</div>
+  <div class="foot-s">Mercado Libre</div>
+  <div class="foot-d"></div>
+  <div class="foot-b">+60 representantes · +40,000 registros · +10 equipos</div>
+</footer>
 
-    // Trigger counters when hero is visible
-    var heroObs=new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){animateCounters();heroObs.unobserve(entry.target);}
-      });
-    },{threshold:0.3});
-    var counterSection=document.querySelector('.counters');
-    if(counterSection)heroObs.observe(counterSection);
+<!-- JS -->
+<script>
+// Counters
+function animC(){document.querySelectorAll('.num-v').forEach(function(el){var t=parseInt(el.dataset.t),d=2200,st=null,suf=t>=1000?'K+':'+',dt=t>=1000?t/1000:t;function step(ts){if(!st)st=ts;var p=Math.min((ts-st)/d,1),e=1-Math.pow(1-p,4),c=Math.floor(e*dt);el.textContent=t>=1000?c+'K+':c+'+';if(p<1)requestAnimationFrame(step);else el.textContent=t>=1000?(t/1000)+'K+':t+'+';}requestAnimationFrame(step);});}
+var cObs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){animC();cObs.unobserve(en.target);}});},{threshold:.3});
+var cEl=document.querySelector('.nums-grid');if(cEl)cObs.observe(cEl);
 
-    // ========== FAQ ==========
-    document.querySelectorAll('.faq-q').forEach(function(q){
-      q.addEventListener('click',function(){
-        var item=q.parentElement,open=item.classList.contains('open');
-        document.querySelectorAll('.faq-i').forEach(function(i){i.classList.remove('open');});
-        if(!open)item.classList.add('open');
-      });
-    });
+// FAQ
+document.querySelectorAll('.fq').forEach(function(q){q.addEventListener('click',function(){var i=q.parentElement,o=i.classList.contains('open');document.querySelectorAll('.fi').forEach(function(f){f.classList.remove('open');});if(!o)i.classList.add('open');});});
 
-    // ========== SCROLL REVEAL ==========
-    var reveals=document.querySelectorAll('.rv');
-    var rvObs=new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){entry.target.classList.add('vis');rvObs.unobserve(entry.target);}
-      });
-    },{threshold:0.08,rootMargin:'0px 0px -30px 0px'});
-    reveals.forEach(function(el){rvObs.observe(el);});
+// Reveal
+var rvs=document.querySelectorAll('.rv');
+var rObs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){en.target.classList.add('v');rObs.unobserve(en.target);}});},{threshold:.06,rootMargin:'0px 0px -20px 0px'});
+rvs.forEach(function(el){rObs.observe(el);});
 
-    // ========== NAV SCROLL ==========
-    window.addEventListener('scroll',function(){
-      document.querySelector('.nav').style.background=window.scrollY>80?'rgba(5,7,9,0.92)':'rgba(10,10,20,0.7)';
-    });
-
-    // ========== SMOOTH SCROLL ==========
-    document.querySelectorAll('a[href^="#"]').forEach(function(a){
-      a.addEventListener('click',function(e){
-        var t=document.querySelector(a.getAttribute('href'));
-        if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
-      });
-    });
-  </script>
-
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}});});
+</script>
 </body>
 </html>
