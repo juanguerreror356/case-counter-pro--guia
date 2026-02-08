@@ -3,741 +3,460 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Case Counter Pro — Documentación</title>
-  <meta name="description" content="Herramienta de gestión de productividad para equipos de servicio al cliente de Mercado Libre"/>
+  <title>Case Counter Pro — Gestión de Productividad Inteligente</title>
+  <meta name="description" content="La herramienta que transformó la forma en que +60 representantes de Mercado Libre gestionan su productividad diaria"/>
   <meta name="author" content="Juan Sebastián Guerrero Rodríguez"/>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>"/>
   <style>
-    /* ========== VARIABLES ========== */
     :root {
-      --meli-yellow: #FFE600;
-      --meli-blue: #2D3277;
-      --meli-dark: #0B0E1A;
-      --meli-card: #12152A;
-      --meli-border: #1E2245;
-      --meli-text: #E8E8F0;
-      --meli-muted: #8B8DA3;
-      --meli-green: #00C853;
-      --meli-orange: #FF9800;
-      --meli-red: #F44336;
-      --meli-accent: #3B82F6;
-      --radius: 12px;
-      --radius-lg: 16px;
-      --shadow: 0 4px 24px rgba(0,0,0,0.3);
-      --max-width: 1100px;
+      --y: #FFE600; --b: #2D3277; --dark: #06080F; --card: #0C0F1D; --card2: #10142A;
+      --border: #1A1E38; --text: #E4E4F0; --muted: #7C7E98; --green: #00E676;
+      --orange: #FF9100; --red: #FF5252; --accent: #448AFF; --purple: #B388FF;
+      --glow-y: rgba(255,230,0,0.15); --glow-b: rgba(45,50,119,0.2);
+      --r: 14px; --r-lg: 20px; --max-w: 1140px;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;scroll-padding-top:80px;}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--dark);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(6,8,15,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px;transition:all 0.3s;}
+    .nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,0.4);border-bottom-color:rgba(255,230,0,0.08);}
+    .nav-inner{max-width:var(--max-w);margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .nav-logo-icon{font-size:26px;}
+    .nav-logo-text{font-size:17px;font-weight:800;color:var(--y);}
+    .nav-links{display:flex;gap:4px;}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;padding:8px 14px;border-radius:10px;transition:all 0.2s;}
+    .nav-links a:hover{color:var(--y);background:var(--glow-y);}
+
+    /* HERO */
+    .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px 24px 80px;overflow:hidden;}
+    .hero-bg{position:absolute;inset:0;z-index:0;}
+    .hero-orb{position:absolute;border-radius:50%;filter:blur(80px);animation:orbFloat 12s ease-in-out infinite;}
+    .hero-orb.o1{width:500px;height:500px;background:rgba(255,230,0,0.06);top:-10%;left:-10%;animation-delay:0s;}
+    .hero-orb.o2{width:400px;height:400px;background:rgba(45,50,119,0.12);bottom:-10%;right:-10%;animation-delay:3s;}
+    .hero-orb.o3{width:300px;height:300px;background:rgba(179,136,255,0.05);top:40%;left:50%;animation-delay:6s;}
+    @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(30px,-20px) scale(1.05)}50%{transform:translate(-20px,30px) scale(0.95)}75%{transform:translate(20px,10px) scale(1.02)}}
+    .hero-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,230,0,0.03) 1px,transparent 1px);background-size:40px 40px;opacity:0.5;}
+    .hero-content{position:relative;z-index:2;max-width:820px;text-align:center;}
+    .hero-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:30px;font-size:13px;font-weight:600;color:var(--green);margin-bottom:28px;animation:fadeInUp 0.8s ease;}
+    .hero-pill-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:blink 1.5s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+    .hero h1{font-size:clamp(36px,6vw,64px);font-weight:900;line-height:1.05;margin-bottom:24px;animation:fadeInUp 0.8s ease 0.1s both;}
+    .hero h1 .hl{background:linear-gradient(135deg,var(--y),#FFC400);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-sub{font-size:clamp(16px,2.5vw,20px);color:var(--muted);max-width:640px;margin:0 auto 40px;line-height:1.7;animation:fadeInUp 0.8s ease 0.2s both;}
+    .hero-sub strong{color:var(--text);}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+    /* HERO STATS */
+    .hero-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:700px;margin:0 auto 48px;animation:fadeInUp 0.8s ease 0.3s both;}
+    .hero-metric{padding:20px 16px;background:rgba(12,15,29,0.8);border:1px solid var(--border);border-radius:var(--r);backdrop-filter:blur(8px);transition:all 0.3s;}
+    .hero-metric:hover{border-color:rgba(255,230,0,0.2);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.3);}
+    .hero-metric-value{font-size:32px;font-weight:900;color:var(--y);line-height:1;}
+    .hero-metric-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1.2px;margin-top:6px;}
+    .hero-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeInUp 0.8s ease 0.4s both;}
+    .btn-h{display:inline-flex;align-items:center;gap:8px;padding:16px 32px;border-radius:var(--r);font-size:15px;font-weight:700;text-decoration:none;transition:all 0.3s;border:2px solid transparent;}
+    .btn-h.p{background:var(--y);color:var(--dark);border-color:var(--y);}
+    .btn-h.p:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(255,230,0,0.25);}
+    .btn-h.s{background:transparent;color:var(--text);border-color:var(--border);}
+    .btn-h.s:hover{border-color:var(--y);color:var(--y);transform:translateY(-4px);}
+
+    /* SOCIAL PROOF BANNER */
+    .proof{padding:0 24px;}
+    .proof-inner{max-width:var(--max-w);margin:-40px auto 0;position:relative;z-index:10;padding:32px 40px;background:linear-gradient(135deg,var(--card2),rgba(45,50,119,0.15));border:1px solid var(--border);border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap;box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+    .proof-item{display:flex;align-items:center;gap:12px;}
+    .proof-icon{font-size:28px;}
+    .proof-text{font-size:14px;color:var(--muted);}
+    .proof-text strong{color:var(--text);font-size:18px;}
+    .proof-divider{width:1px;height:40px;background:var(--border);}
+
+    /* CONTAINER */
+    .container{max-width:var(--max-w);margin:0 auto;padding:0 24px;}
+
+    /* SECTIONS */
+    .section{padding:100px 0;}
+    .section-alt{background:linear-gradient(180deg,rgba(16,20,42,0.4) 0%,var(--dark) 100%);}
+    .section-header{text-align:center;margin-bottom:56px;}
+    .section-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 18px;background:var(--glow-y);border:1px solid rgba(255,230,0,0.12);border-radius:24px;font-size:12px;font-weight:700;color:var(--y);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;}
+    .section-title{font-size:clamp(30px,4.5vw,44px);font-weight:900;margin-bottom:14px;line-height:1.15;}
+    .section-sub{font-size:17px;color:var(--muted);max-width:600px;margin:0 auto;line-height:1.7;}
+
+    /* TOC — 3D CARDS */
+    .toc{padding:80px 0;}
+    .toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;}
+    .toc-card{position:relative;display:flex;gap:18px;padding:28px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);text-decoration:none;color:var(--text);transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);overflow:hidden;}
+    .toc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--y),var(--purple));opacity:0;transition:opacity 0.3s;}
+    .toc-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,230,0,0.04),transparent 60%);opacity:0;transition:opacity 0.3s;}
+    .toc-card:hover{border-color:rgba(255,230,0,0.15);transform:translateY(-8px) scale(1.01);box-shadow:0 24px 48px rgba(0,0,0,0.4);}
+    .toc-card:hover::before{opacity:1;}
+    .toc-card:hover::after{opacity:1;}
+    .toc-icon{font-size:40px;flex-shrink:0;line-height:1;}
+    .toc-text{position:relative;z-index:2;}
+    .toc-text h3{font-size:17px;font-weight:700;margin-bottom:6px;}
+    .toc-text p{font-size:13px;color:var(--muted);line-height:1.5;}
+
+    /* FEATURE CARDS — GLASS */
+    .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
+    .feat{position:relative;padding:32px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);transition:all 0.4s;overflow:hidden;}
+    .feat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--y),var(--accent));opacity:0;transition:0.3s;}
+    .feat:hover{border-color:rgba(255,230,0,0.15);transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.35);}
+    .feat:hover::before{opacity:1;}
+    .feat-ico{font-size:44px;margin-bottom:18px;}
+    .feat-t{font-size:18px;font-weight:700;margin-bottom:10px;}
+    .feat-d{font-size:14px;color:var(--muted);line-height:1.7;}
+
+    /* STEPS — TIMELINE */
+    .timeline{position:relative;display:flex;flex-direction:column;gap:0;padding-left:48px;}
+    .timeline::before{content:'';position:absolute;top:0;bottom:0;left:23px;width:2px;background:linear-gradient(180deg,var(--y),var(--purple),var(--accent));}
+    .tl-step{position:relative;padding:28px 0;border-bottom:1px solid var(--border);}
+    .tl-step:last-child{border-bottom:none;}
+    .tl-dot{position:absolute;left:-48px;top:32px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;background:linear-gradient(135deg,var(--y),#FFC400);color:var(--dark);border-radius:14px;box-shadow:0 4px 20px rgba(255,230,0,0.25);z-index:2;}
+    .tl-step h3{font-size:18px;font-weight:700;margin-bottom:8px;}
+    .tl-step p{font-size:14px;color:var(--muted);line-height:1.7;}
+
+    /* TIP BOXES */
+    .tip{display:flex;gap:16px;padding:22px;border-radius:var(--r);margin:28px 0;border-left:4px solid;}
+    .tip.info{background:rgba(68,138,255,0.06);border-color:var(--accent);}
+    .tip.ok{background:rgba(0,230,118,0.06);border-color:var(--green);}
+    .tip.warn{background:rgba(255,145,0,0.06);border-color:var(--orange);}
+    .tip-ico{font-size:24px;flex-shrink:0;}
+    .tip-c h4{font-size:14px;font-weight:700;margin-bottom:4px;}
+    .tip-c p{font-size:13px;color:var(--muted);line-height:1.6;}
+
+    /* SEMÁFORO */
+    .sema{display:flex;gap:20px;flex-wrap:wrap;margin:28px 0;}
+    .sema-i{flex:1;min-width:180px;padding:28px;text-align:center;border-radius:var(--r-lg);border:2px solid;transition:all 0.3s;}
+    .sema-i:hover{transform:translateY(-4px);}
+    .sema-i.g{border-color:var(--green);background:rgba(0,230,118,0.04);}
+    .sema-i.o{border-color:var(--orange);background:rgba(255,145,0,0.04);}
+    .sema-i.r{border-color:var(--red);background:rgba(255,82,82,0.04);}
+    .sema-em{font-size:36px;margin-bottom:8px;}
+    .sema-l{font-size:15px;font-weight:700;margin-bottom:4px;}
+    .sema-v{font-size:28px;font-weight:900;}
+    .sema-d{font-size:12px;color:var(--muted);margin-top:6px;}
+
+    /* TAB CARDS */
+    .tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;}
+    .tab{padding:28px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);border-top:4px solid var(--y);transition:all 0.3s;}
+    .tab:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.3);border-top-color:var(--green);}
+    .tab-h{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+    .tab-n{width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:var(--y);color:var(--dark);font-size:14px;font-weight:900;border-radius:10px;}
+    .tab-t{font-size:16px;font-weight:700;}
+    .tab ul{list-style:none;}
+    .tab li{font-size:13px;color:var(--muted);padding:7px 0;border-bottom:1px solid rgba(26,30,56,0.5);display:flex;align-items:flex-start;gap:8px;}
+    .tab li:last-child{border-bottom:none;}
+
+    /* DASHBOARD RESULT CARDS */
+    .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin:48px 0;}
+    .dash-card{position:relative;display:flex;flex-direction:column;gap:18px;padding:36px;background:linear-gradient(135deg,var(--card),rgba(45,50,119,0.12));border:2px solid var(--border);border-radius:var(--r-lg);text-decoration:none;color:var(--text);transition:all 0.4s;overflow:hidden;}
+    .dash-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--y),var(--green));}
+    .dash-card::after{content:'';position:absolute;bottom:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(255,230,0,0.03),transparent);border-radius:50%;}
+    .dash-card:hover{border-color:var(--y);transform:translateY(-8px);box-shadow:0 24px 60px rgba(255,230,0,0.1);}
+    .dash-ico{font-size:52px;z-index:2;}
+    .dash-t{font-size:22px;font-weight:800;z-index:2;}
+    .dash-d{font-size:14px;color:var(--muted);line-height:1.7;z-index:2;}
+    .dash-cta{display:inline-flex;align-items:center;gap:8px;color:var(--y);font-size:15px;font-weight:700;z-index:2;transition:gap 0.3s;}
+    .dash-card:hover .dash-cta{gap:14px;}
+
+    /* WHY SECTION */
+    .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;}
+    .why-card{padding:36px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);transition:all 0.4s;text-align:center;}
+    .why-card:hover{border-color:rgba(255,230,0,0.15);transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.3);}
+    .why-ico{font-size:52px;margin-bottom:16px;}
+    .why-t{font-size:20px;font-weight:800;margin-bottom:10px;}
+    .why-d{font-size:14px;color:var(--muted);line-height:1.7;}
+
+    /* FAQ */
+    .faq-list{display:flex;flex-direction:column;gap:12px;max-width:800px;margin:0 auto;}
+    .faq-i{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color 0.3s;}
+    .faq-i:hover{border-color:rgba(255,230,0,0.1);}
+    .faq-q{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;cursor:pointer;font-size:15px;font-weight:600;transition:all 0.2s;user-select:none;}
+    .faq-q:hover{color:var(--y);}
+    .faq-arr{font-size:16px;transition:transform 0.3s;color:var(--muted);}
+    .faq-i.open .faq-arr{transform:rotate(180deg);color:var(--y);}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
+    .faq-i.open .faq-a{max-height:400px;}
+    .faq-a-in{padding:0 26px 22px;font-size:14px;color:var(--muted);line-height:1.8;}
+
+    /* FOOTER */
+    .footer{padding:80px 24px;text-align:center;background:linear-gradient(180deg,var(--dark),#030510);border-top:1px solid var(--border);}
+    .footer-logo{font-size:56px;margin-bottom:16px;}
+    .footer-t{font-size:22px;font-weight:900;color:var(--y);margin-bottom:8px;}
+    .footer-a{font-size:15px;color:var(--muted);margin-bottom:4px;}
+    .footer-a strong{color:var(--text);}
+    .footer-div{width:60px;height:2px;background:var(--border);margin:24px auto;}
+    .footer-copy{font-size:12px;color:var(--muted);}
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      .nav-links{display:none;}
+      .hero{min-height:auto;padding:120px 16px 60px;}
+      .hero-metrics{grid-template-columns:repeat(2,1fr);gap:12px;}
+      .proof-inner{flex-direction:column;gap:20px;padding:24px;}
+      .proof-divider{width:100%;height:1px;}
+      .section{padding:64px 0;}
+      .feat-grid,.tabs,.why-grid,.dash-grid{grid-template-columns:1fr;}
+      .sema{flex-direction:column;}
+      .timeline{padding-left:40px;}
+      .tl-dot{left:-40px;width:40px;height:40px;font-size:16px;}
     }
 
-    /* ========== RESET ========== */
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: var(--meli-dark); color: var(--meli-text);
-      line-height: 1.7; -webkit-font-smoothing: antialiased;
-    }
-
-    /* ========== NAV STICKY ========== */
-    .nav {
-      position: fixed; top:0; left:0; right:0; z-index:1000;
-      background: rgba(11,14,26,0.95); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--meli-border); padding: 0 24px;
-    }
-    .nav-inner {
-      max-width: var(--max-width); margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 64px;
-    }
-    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
-    .nav-logo-icon { font-size:28px; }
-    .nav-logo-text { font-size:18px; font-weight:800; color:var(--meli-yellow); }
-    .nav-logo-version { font-size:11px; font-weight:600; color:var(--meli-muted); background:var(--meli-border); padding:2px 8px; border-radius:20px; }
-    .nav-links { display:flex; gap:8px; }
-    .nav-links a {
-      color:var(--meli-muted); text-decoration:none; font-size:13px; font-weight:600;
-      padding:8px 14px; border-radius:8px; transition:all 0.2s;
-    }
-    .nav-links a:hover { color:var(--meli-yellow); background:rgba(255,230,0,0.08); }
-
-    /* ========== HERO ========== */
-    .hero {
-      position:relative; padding:140px 24px 80px; text-align:center;
-      background: linear-gradient(135deg, var(--meli-dark) 0%, #0D1230 50%, #111640 100%);
-      overflow:hidden;
-    }
-    .hero::before {
-      content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
-      background: radial-gradient(circle at 30% 50%, rgba(255,230,0,0.03) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 50%, rgba(45,50,119,0.05) 0%, transparent 50%);
-      animation: heroFloat 20s ease-in-out infinite;
-    }
-    @keyframes heroFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-2%,1%)} }
-    .hero-content { position:relative; z-index:2; max-width:800px; margin:0 auto; }
-    .hero-badge {
-      display:inline-flex; align-items:center; gap:8px; padding:8px 20px;
-      background:rgba(255,230,0,0.1); border:1px solid rgba(255,230,0,0.2);
-      border-radius:30px; font-size:13px; font-weight:600; color:var(--meli-yellow);
-      margin-bottom:24px;
-    }
-    .hero-badge-dot { width:8px; height:8px; background:var(--meli-green); border-radius:50%; animation:blink 2s infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-    .hero h1 { font-size:clamp(32px,5vw,56px); font-weight:900; line-height:1.1; margin-bottom:20px; }
-    .hero h1 .highlight { color:var(--meli-yellow); }
-    .hero-subtitle { font-size:clamp(16px,2.5vw,20px); color:var(--meli-muted); max-width:600px; margin:0 auto 32px; line-height:1.6; }
-    .hero-stats { display:flex; justify-content:center; gap:40px; flex-wrap:wrap; margin-bottom:40px; }
-    .hero-stat { text-align:center; }
-    .hero-stat-value { font-size:36px; font-weight:900; color:var(--meli-yellow); line-height:1; }
-    .hero-stat-label { font-size:12px; color:var(--meli-muted); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
-    .hero-cta { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
-    .btn-hero {
-      display:inline-flex; align-items:center; gap:8px; padding:14px 28px;
-      border-radius:var(--radius); font-size:15px; font-weight:700;
-      text-decoration:none; transition:all 0.3s; border:2px solid transparent;
-    }
-    .btn-hero.primary { background:var(--meli-yellow); color:var(--meli-dark); }
-    .btn-hero.primary:hover { transform:translateY(-3px); box-shadow:0 12px 30px rgba(255,230,0,0.3); }
-    .btn-hero.secondary { background:transparent; color:var(--meli-text); border-color:var(--meli-border); }
-    .btn-hero.secondary:hover { border-color:var(--meli-yellow); color:var(--meli-yellow); transform:translateY(-3px); }
-
-    /* ========== CONTAINER ========== */
-    .container { max-width:var(--max-width); margin:0 auto; padding:0 24px; }
-
-    /* ========== TABLE OF CONTENTS ========== */
-    .toc-section { padding:60px 0; }
-    .toc-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
-    .toc-card {
-      display:flex; align-items:center; gap:16px; padding:20px;
-      background:var(--meli-card); border:1px solid var(--meli-border);
-      border-radius:var(--radius); text-decoration:none; color:var(--meli-text);
-      transition:all 0.3s;
-    }
-    .toc-card:hover { border-color:var(--meli-yellow); transform:translateY(-4px); box-shadow:var(--shadow); }
-    .toc-card-icon { font-size:36px; flex-shrink:0; }
-    .toc-card-text h3 { font-size:16px; font-weight:700; margin-bottom:4px; }
-    .toc-card-text p { font-size:13px; color:var(--meli-muted); }
-
-    /* ========== SECTIONS ========== */
-    .section { padding:80px 0; }
-    .section-alt { background:linear-gradient(180deg, rgba(18,21,42,0.5) 0%, var(--meli-dark) 100%); }
-    .section-header { text-align:center; margin-bottom:48px; }
-    .section-badge {
-      display:inline-flex; align-items:center; gap:6px; padding:6px 16px;
-      background:rgba(255,230,0,0.08); border:1px solid rgba(255,230,0,0.15);
-      border-radius:20px; font-size:12px; font-weight:700; color:var(--meli-yellow);
-      text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;
-    }
-    .section-title { font-size:clamp(28px,4vw,40px); font-weight:900; margin-bottom:12px; line-height:1.2; }
-    .section-subtitle { font-size:16px; color:var(--meli-muted); max-width:600px; margin:0 auto; }
-
-    /* ========== CARDS ========== */
-    .card {
-      background:var(--meli-card); border:1px solid var(--meli-border);
-      border-radius:var(--radius-lg); padding:28px; margin-bottom:24px;
-      transition:all 0.3s;
-    }
-    .card:hover { border-color:rgba(255,230,0,0.2); }
-    .card-title { font-size:20px; font-weight:800; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
-
-    /* ========== FEATURE GRID ========== */
-    .feature-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
-    .feature-card {
-      background:var(--meli-card); border:1px solid var(--meli-border);
-      border-radius:var(--radius-lg); padding:28px; transition:all 0.3s; position:relative; overflow:hidden;
-    }
-    .feature-card::before {
-      content:''; position:absolute; top:0; left:0; right:0; height:3px;
-      background:linear-gradient(90deg, var(--meli-yellow), var(--meli-blue));
-      opacity:0; transition:opacity 0.3s;
-    }
-    .feature-card:hover { border-color:rgba(255,230,0,0.2); transform:translateY(-4px); box-shadow:var(--shadow); }
-    .feature-card:hover::before { opacity:1; }
-    .feature-icon { font-size:40px; margin-bottom:16px; }
-    .feature-title { font-size:17px; font-weight:700; margin-bottom:8px; }
-    .feature-text { font-size:14px; color:var(--meli-muted); line-height:1.6; }
-
-    /* ========== STEPS ========== */
-    .steps { display:flex; flex-direction:column; gap:24px; }
-    .step {
-      display:flex; gap:20px; padding:24px;
-      background:var(--meli-card); border:1px solid var(--meli-border);
-      border-radius:var(--radius-lg); transition:all 0.3s;
-    }
-    .step:hover { border-color:rgba(255,230,0,0.2); }
-    .step-number {
-      width:48px; height:48px; min-width:48px; display:flex; align-items:center; justify-content:center;
-      background:linear-gradient(135deg, var(--meli-yellow), #FFC400);
-      color:var(--meli-dark); font-size:20px; font-weight:900;
-      border-radius:12px;
-    }
-    .step-content h3 { font-size:16px; font-weight:700; margin-bottom:6px; }
-    .step-content p { font-size:14px; color:var(--meli-muted); line-height:1.6; }
-
-    /* ========== TIP BOXES ========== */
-    .tip-box {
-      display:flex; gap:16px; padding:20px; border-radius:var(--radius);
-      margin:24px 0; border-left:4px solid;
-    }
-    .tip-box.info { background:rgba(59,130,246,0.08); border-color:var(--meli-accent); }
-    .tip-box.success { background:rgba(0,200,83,0.08); border-color:var(--meli-green); }
-    .tip-box.warning { background:rgba(255,152,0,0.08); border-color:var(--meli-orange); }
-    .tip-box.danger { background:rgba(244,67,54,0.08); border-color:var(--meli-red); }
-    .tip-box-icon { font-size:24px; flex-shrink:0; }
-    .tip-box-content h4 { font-size:14px; font-weight:700; margin-bottom:4px; }
-    .tip-box-content p { font-size:13px; color:var(--meli-muted); line-height:1.6; }
-
-    /* ========== SEMÁFORO ========== */
-    .semaforo { display:flex; gap:16px; flex-wrap:wrap; margin:24px 0; }
-    .semaforo-item {
-      flex:1; min-width:160px; padding:20px; text-align:center;
-      border-radius:var(--radius); border:2px solid;
-    }
-    .semaforo-item.green { border-color:var(--meli-green); background:rgba(0,200,83,0.05); }
-    .semaforo-item.orange { border-color:var(--meli-orange); background:rgba(255,152,0,0.05); }
-    .semaforo-item.red { border-color:var(--meli-red); background:rgba(244,67,54,0.05); }
-    .semaforo-emoji { font-size:32px; margin-bottom:8px; }
-    .semaforo-label { font-size:14px; font-weight:700; margin-bottom:4px; }
-    .semaforo-range { font-size:24px; font-weight:900; }
-    .semaforo-desc { font-size:12px; color:var(--meli-muted); margin-top:4px; }
-
-    /* ========== TAB CARDS ========== */
-    .tab-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
-    .tab-card {
-      padding:24px; background:var(--meli-card); border:1px solid var(--meli-border);
-      border-radius:var(--radius-lg); border-top:3px solid var(--meli-yellow); transition:all 0.3s;
-    }
-    .tab-card:hover { transform:translateY(-4px); box-shadow:var(--shadow); }
-    .tab-card-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-    .tab-card-number { width:28px; height:28px; display:flex; align-items:center; justify-content:center; background:var(--meli-yellow); color:var(--meli-dark); font-size:13px; font-weight:900; border-radius:8px; }
-    .tab-card-title { font-size:15px; font-weight:700; }
-    .tab-card-features { list-style:none; }
-    .tab-card-features li { font-size:13px; color:var(--meli-muted); padding:6px 0; border-bottom:1px solid var(--meli-border); display:flex; align-items:flex-start; gap:8px; }
-    .tab-card-features li:last-child { border-bottom:none; }
-
-    /* ========== DASHBOARD LINKS ========== */
-    .dashboard-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; margin:40px 0; }
-    .dashboard-link {
-      display:flex; flex-direction:column; gap:16px; padding:32px;
-      background:linear-gradient(135deg, var(--meli-card), rgba(45,50,119,0.2));
-      border:2px solid var(--meli-border); border-radius:var(--radius-lg);
-      text-decoration:none; color:var(--meli-text); transition:all 0.3s; position:relative; overflow:hidden;
-    }
-    .dashboard-link::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--meli-yellow), var(--meli-blue)); }
-    .dashboard-link:hover { border-color:var(--meli-yellow); transform:translateY(-6px); box-shadow:0 16px 40px rgba(255,230,0,0.15); }
-    .dashboard-link-icon { font-size:48px; }
-    .dashboard-link-title { font-size:20px; font-weight:800; }
-    .dashboard-link-desc { font-size:14px; color:var(--meli-muted); line-height:1.6; }
-    .dashboard-link-cta { display:inline-flex; align-items:center; gap:8px; color:var(--meli-yellow); font-size:14px; font-weight:700; }
-
-    /* ========== FAQ ========== */
-    .faq-list { display:flex; flex-direction:column; gap:12px; }
-    .faq-item { background:var(--meli-card); border:1px solid var(--meli-border); border-radius:var(--radius); overflow:hidden; }
-    .faq-question {
-      display:flex; justify-content:space-between; align-items:center;
-      padding:20px 24px; cursor:pointer; font-size:15px; font-weight:600;
-      transition:all 0.2s; user-select:none;
-    }
-    .faq-question:hover { background:rgba(255,230,0,0.03); }
-    .faq-arrow { font-size:18px; transition:transform 0.3s; }
-    .faq-item.open .faq-arrow { transform:rotate(180deg); }
-    .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
-    .faq-item.open .faq-answer { max-height:500px; }
-    .faq-answer-inner { padding:0 24px 20px; font-size:14px; color:var(--meli-muted); line-height:1.7; }
-
-    /* ========== FOOTER ========== */
-    .footer {
-      padding:60px 24px; text-align:center;
-      background:linear-gradient(180deg, var(--meli-dark), #080A14);
-      border-top:1px solid var(--meli-border);
-    }
-    .footer-logo { font-size:48px; margin-bottom:16px; }
-    .footer-title { font-size:20px; font-weight:800; color:var(--meli-yellow); margin-bottom:8px; }
-    .footer-creator { font-size:14px; color:var(--meli-muted); margin-bottom:4px; }
-    .footer-team { font-size:13px; color:var(--meli-muted); }
-    .footer-divider { width:60px; height:2px; background:var(--meli-border); margin:24px auto; }
-    .footer-copy { font-size:12px; color:var(--meli-muted); }
-
-    /* ========== RESPONSIVE ========== */
-    @media (max-width:768px) {
-      .nav-links { display:none; }
-      .hero { padding:120px 16px 60px; }
-      .hero-stats { gap:24px; }
-      .section { padding:48px 0; }
-      .feature-grid { grid-template-columns:1fr; }
-      .tab-grid { grid-template-columns:1fr; }
-      .dashboard-links { grid-template-columns:1fr; }
-      .semaforo { flex-direction:column; }
-      .step { flex-direction:column; }
-    }
+    /* SCROLL ANIMATIONS */
+    .reveal{opacity:0;transform:translateY(30px);transition:all 0.7s cubic-bezier(0.4,0,0.2,1);}
+    .reveal.visible{opacity:1;transform:translateY(0);}
   </style>
 </head>
 <body>
 
-  <!-- ========== NAV ========== -->
-  <nav class="nav">
+  <!-- NAV -->
+  <nav class="nav" id="mainNav">
     <div class="nav-inner">
-      <a href="#top" class="nav-logo">
-        <span class="nav-logo-icon">📊</span>
-        <span class="nav-logo-text">Case Counter Pro</span>
-        <span class="nav-logo-version">v3.3</span>
-      </a>
+      <a href="#top" class="nav-logo"><span class="nav-logo-icon">📊</span><span class="nav-logo-text">Case Counter Pro</span></a>
       <div class="nav-links">
-        <a href="#extension">🔧 Extensión</a>
-        <a href="#dashboard">📊 Dashboard</a>
-        <a href="#dashboards-live">🚀 Ver en Vivo</a>
-        <a href="#faq">❓ FAQ</a>
+        <a href="#extension">Extensión</a>
+        <a href="#features">Funcionalidades</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#results">Resultados</a>
+        <a href="#faq">FAQ</a>
       </div>
     </div>
   </nav>
 
-  <!-- ========== HERO ========== -->
+  <!-- HERO -->
   <section class="hero" id="top">
+    <div class="hero-bg"><div class="hero-orb o1"></div><div class="hero-orb o2"></div><div class="hero-orb o3"></div><div class="hero-grid"></div></div>
     <div class="hero-content">
-      <div class="hero-badge">
-        <span class="hero-badge-dot"></span>
-        Herramienta en Producción — Mercado Libre
+      <div class="hero-pill"><span class="hero-pill-dot"></span>En producción — Mercado Libre Colombia</div>
+      <h1>Tu productividad,<br><span class="hl">en tus manos</span></h1>
+      <p class="hero-sub">La herramienta que <strong>+60 representantes</strong> ya usan para ver su rendimiento en tiempo real, entender cómo van y tomar el control de su día. No es un piloto. <strong>Es la realidad de +10 equipos en Mature.</strong></p>
+      <div class="hero-metrics">
+        <div class="hero-metric"><div class="hero-metric-value">60+</div><div class="hero-metric-label">Representantes</div></div>
+        <div class="hero-metric"><div class="hero-metric-value">40K+</div><div class="hero-metric-label">Registros</div></div>
+        <div class="hero-metric"><div class="hero-metric-value">10+</div><div class="hero-metric-label">Equipos</div></div>
+        <div class="hero-metric"><div class="hero-metric-value">2</div><div class="hero-metric-label">Turnos</div></div>
       </div>
-      <h1>Gestión de Productividad <span class="highlight">Inteligente</span></h1>
-      <p class="hero-subtitle">
-        Extensión de Chrome + Dashboard analítico que conecta a los representantes de servicio al cliente 
-        con su rendimiento en tiempo real. Datos que generan valor, no presión.
-      </p>
-      <div class="hero-stats">
-        <div class="hero-stat"><div class="hero-stat-value">95+</div><div class="hero-stat-label">Representantes</div></div>
-        <div class="hero-stat"><div class="hero-stat-value">50K+</div><div class="hero-stat-label">Registros/mes</div></div>
-        <div class="hero-stat"><div class="hero-stat-value">2</div><div class="hero-stat-label">Turnos Activos</div></div>
-        <div class="hero-stat"><div class="hero-stat-value">7</div><div class="hero-stat-label">Equipos</div></div>
-      </div>
-      <div class="hero-cta">
-        <a href="#dashboards-live" class="btn-hero primary">🚀 Ver Dashboards en Vivo</a>
-        <a href="#extension" class="btn-hero secondary">📖 Leer Documentación</a>
+      <div class="hero-ctas">
+        <a href="#results" class="btn-h p">📊 Ver Resultados Reales</a>
+        <a href="#extension" class="btn-h s">Conocer la Extensión →</a>
       </div>
     </div>
   </section>
 
-  <!-- ========== TABLE OF CONTENTS ========== -->
-  <section class="toc-section">
+  <!-- SOCIAL PROOF -->
+  <div class="proof">
+    <div class="proof-inner">
+      <div class="proof-item"><span class="proof-icon">🏢</span><div class="proof-text">Usado en<br><strong>Publicaciones y Envíos Mature</strong></div></div>
+      <div class="proof-divider"></div>
+      <div class="proof-item"><span class="proof-icon">☀️</span><div class="proof-text">Turno<br><strong>Mañana</strong></div></div>
+      <div class="proof-divider"></div>
+      <div class="proof-item"><span class="proof-icon">🌙</span><div class="proof-text">Turno<br><strong>Tarde</strong></div></div>
+      <div class="proof-divider"></div>
+      <div class="proof-item"><span class="proof-icon">📈</span><div class="proof-text">Productividad<br><strong>Medible y Real</strong></div></div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <section class="toc">
     <div class="container">
       <div class="toc-grid">
-        <a href="#extension" class="toc-card">
-          <span class="toc-card-icon">🔧</span>
-          <div class="toc-card-text"><h3>La Extensión</h3><p>Qué es, cómo funciona y por qué es importante</p></div>
-        </a>
-        <a href="#features" class="toc-card">
-          <span class="toc-card-icon">✨</span>
-          <div class="toc-card-text"><h3>Funcionalidades</h3><p>Ranking, modo foco, notas, personalización</p></div>
-        </a>
-        <a href="#how-to" class="toc-card">
-          <span class="toc-card-icon">📋</span>
-          <div class="toc-card-text"><h3>Cómo Usarla</h3><p>Guía paso a paso para registrar casos</p></div>
-        </a>
-        <a href="#dashboard" class="toc-card">
-          <span class="toc-card-icon">📊</span>
-          <div class="toc-card-text"><h3>El Dashboard</h3><p>Análisis completo de uso y productividad</p></div>
-        </a>
-        <a href="#dashboards-live" class="toc-card">
-          <span class="toc-card-icon">🚀</span>
-          <div class="toc-card-text"><h3>Dashboards en Vivo</h3><p>Acceso directo a las herramientas</p></div>
-        </a>
-        <a href="#faq" class="toc-card">
-          <span class="toc-card-icon">❓</span>
-          <div class="toc-card-text"><h3>Preguntas Frecuentes</h3><p>Respuestas a las dudas más comunes</p></div>
-        </a>
+        <a href="#extension" class="toc-card reveal"><span class="toc-icon">🔧</span><div class="toc-text"><h3>La Extensión</h3><p>Tu copiloto de productividad que trabaja contigo, no contra ti</p></div></a>
+        <a href="#features" class="toc-card reveal"><span class="toc-icon">✨</span><div class="toc-text"><h3>Funcionalidades</h3><p>Ranking, modo foco, notas, personalización total y más</p></div></a>
+        <a href="#how-to" class="toc-card reveal"><span class="toc-icon">📋</span><div class="toc-text"><h3>Cómo Usarla</h3><p>De cero a productivo en 5 pasos simples</p></div></a>
+        <a href="#dashboard" class="toc-card reveal"><span class="toc-icon">📊</span><div class="toc-text"><h3>El Dashboard</h3><p>Datos que demuestran el impacto real de la herramienta</p></div></a>
+        <a href="#results" class="toc-card reveal"><span class="toc-icon">🏆</span><div class="toc-text"><h3>Resultados Reales</h3><p>Dashboards en producción con datos que hablan por sí solos</p></div></a>
+        <a href="#faq" class="toc-card reveal"><span class="toc-icon">❓</span><div class="toc-text"><h3>Preguntas Frecuentes</h3><p>Todo lo que necesitas saber, sin rodeos</p></div></a>
       </div>
     </div>
   </section>
 
-  <!-- ========== SECCIÓN 1: EXTENSIÓN ========== -->
+  <!-- SECCIÓN: EXTENSIÓN -->
   <section class="section section-alt" id="extension">
     <div class="container">
-      <div class="section-header">
-        <div class="section-badge">🔧 Sección 1</div>
-        <h2 class="section-title">La Extensión de Chrome</h2>
-        <p class="section-subtitle">Una herramienta que pone al representante en el centro, con datos que empoderan en vez de presionar</p>
+      <div class="section-header reveal">
+        <div class="section-badge">La Herramienta</div>
+        <h2 class="section-title">Tu productividad, visible<br>en tiempo real</h2>
+        <p class="section-sub">Case Counter Pro nació de una necesidad real: que cada representante pueda saber cómo va su día sin esperar reportes del día siguiente.</p>
       </div>
-
-      <div class="card">
-        <div class="card-title">🎯 ¿Qué es Case Counter Pro?</div>
-        <p style="font-size:15px;color:var(--meli-muted);line-height:1.8;margin-bottom:20px;">
-          Case Counter Pro es una <strong style="color:var(--meli-text)">extensión de Google Chrome</strong> diseñada para representantes de servicio al cliente de Mercado Libre. 
-          Permite registrar cada caso gestionado con un solo clic, generando datos en tiempo real sobre productividad, tipo de caso y rendimiento comparativo.
-        </p>
-        <p style="font-size:15px;color:var(--meli-muted);line-height:1.8;">
-          No es una herramienta de vigilancia. Es una <strong style="color:var(--meli-yellow)">herramienta de empoderamiento</strong>: cada representante puede ver 
-          su progreso, compararse con sus pares y entender en tiempo real si está cumpliendo su meta del día. Para quienes prefieren no ver el ranking, 
-          existe el <strong style="color:var(--meli-text)">Modo Foco</strong> 🧘 que muestra solo tu progreso personal.
-        </p>
-      </div>
-
-      <div class="tip-box success">
-        <span class="tip-box-icon">💡</span>
-        <div class="tip-box-content">
-          <h4>¿Por qué es importante?</h4>
-          <p>Permite medir de forma objetiva el uso de herramientas y correlacionar con productividad real. 
-          Los datos muestran que los representantes que usan la extensión consistentemente tienden a tener mejor productividad.</p>
+      <div class="why-grid reveal">
+        <div class="why-card">
+          <div class="why-ico">🎯</div>
+          <div class="why-t">Empoderamiento, no vigilancia</div>
+          <div class="why-d">Tú decides cuánto quieres ver. Ranking completo, Top 5, o Modo Foco sin comparaciones. Los datos son tuyos para crecer, no para presionarte.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-ico">⚡</div>
+          <div class="why-t">Datos en tiempo real</div>
+          <div class="why-d">Registras un caso y al instante ves tu progreso actualizado. El ranking se actualiza cada 30 segundos. Sabes exactamente dónde estás.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-ico">🤝</div>
+          <div class="why-t">Diseñada por un representante</div>
+          <div class="why-d">Creada desde la trinchera, entendiendo la realidad del día a día. Cada funcionalidad existe porque alguien la necesitaba de verdad.</div>
         </div>
       </div>
-
-      <!-- QUÉ REGISTRA -->
-      <div class="card">
-        <div class="card-title">📝 ¿Qué registra?</div>
-        <p style="font-size:14px;color:var(--meli-muted);margin-bottom:16px;">Cada vez que registras un caso, la extensión captura automáticamente:</p>
-        <div class="feature-grid">
-          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
-            <span style="font-size:24px;">👤</span><div><div style="font-size:13px;font-weight:700;">Usuario (LDAP)</div><div style="font-size:12px;color:var(--meli-muted);">Tu identificador único</div></div>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
-            <span style="font-size:24px;">⏰</span><div><div style="font-size:13px;font-weight:700;">Timestamp</div><div style="font-size:12px;color:var(--meli-muted);">Fecha y hora exacta</div></div>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
-            <span style="font-size:24px;">📞</span><div><div style="font-size:13px;font-weight:700;">Tipo (ON/OFF)</div><div style="font-size:12px;color:var(--meli-muted);">Llamada o escrito</div></div>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
-            <span style="font-size:24px;">🔢</span><div><div style="font-size:13px;font-weight:700;">Case ID</div><div style="font-size:12px;color:var(--meli-muted);">Número único del caso</div></div>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
-            <span style="font-size:24px;">⏱️</span><div><div style="font-size:13px;font-weight:700;">TMC (minutos)</div><div style="font-size:12px;color:var(--meli-muted);">Tiempo medio de contacto</div></div>
-          </div>
-          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
-            <span style="font-size:24px;">👔</span><div><div style="font-size:13px;font-weight:700;">Líder asignado</div><div style="font-size:12px;color:var(--meli-muted);">Tu team leader</div></div>
-          </div>
-        </div>
+      <div class="tip ok" style="margin-top:36px;">
+        <span class="tip-ico">💡</span>
+        <div class="tip-c"><h4>¿Por qué importa?</h4><p>Los datos muestran que los representantes que usan la extensión consistentemente tienen mejor visibilidad de su rendimiento. Es la diferencia entre gestionar a ciegas y gestionar con datos.</p></div>
       </div>
     </div>
   </section>
 
-<!-- ========== FEATURES ========== -->
+  <!-- FEATURES -->
   <section class="section" id="features">
     <div class="container">
-      <div class="section-header">
-        <div class="section-badge">✨ Funcionalidades</div>
-        <h2 class="section-title">Todo lo que necesitas</h2>
-        <p class="section-subtitle">Diseñada por un representante, para representantes</p>
+      <div class="section-header reveal">
+        <div class="section-badge">Funcionalidades</div>
+        <h2 class="section-title">Todo lo que necesitas.<br>Nada que te sobre.</h2>
+        <p class="section-sub">Cada feature existe porque alguien del equipo la pidió</p>
       </div>
-
-      <div class="feature-grid">
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <div class="feature-title">Registro Instantáneo</div>
-          <div class="feature-text">Registra ON (llamada) u OFF (escrito) con un clic. Incluye Level Up ⭐ para Estilo Meli. El caso se cuenta al instante sin esperar al servidor.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🏆</div>
-          <div class="feature-title">Ranking en Tiempo Real</div>
-          <div class="feature-text">Ve cómo va tu equipo con el Top 5 en la pantalla principal o el ranking completo. Actualiza con 🔄 cuando quieras. Filtra por equipo o por turno.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🧘</div>
-          <div class="feature-title">Modo Foco</div>
-          <div class="feature-text">Para quienes prefieren concentrarse sin distracciones. Sin ranking, sin comparaciones. Solo tu progreso, tu meta y un mensaje de calma. Un caso a la vez.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎯</div>
-          <div class="feature-title">Meta Diaria Personalizable</div>
-          <div class="feature-text">Configura tu meta y ve tu progreso en una barra visual con emoji personalizable. Sabe exactamente cuánto te falta para cumplir tu objetivo.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📝</div>
-          <div class="feature-title">Bloc de Notas</div>
-          <div class="feature-text">Anota cosas importantes del día que se borran automáticamente a medianoche. Perfecto para recordatorios rápidos durante el turno.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎨</div>
-          <div class="feature-title">Personalización Total</div>
-          <div class="feature-text">5 paletas de colores, modo oscuro/claro, colores custom, avatar con 160+ opciones y emoji de progreso personalizable. Hazla tuya.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📜</div>
-          <div class="feature-title">Historial Completo</div>
-          <div class="feature-text">Revisa tus casos de hoy, la semana o cualquier rango personalizado. Filtra por tipo (ON, OFF, Level Up) con paginación inteligente.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔒</div>
-          <div class="feature-title">Datos Protegidos</div>
-          <div class="feature-text">Tus casos nunca se pierden. La sincronización inteligente nunca resta casos. Protección contra duplicados con confirmación.</div>
-        </div>
+      <div class="feat-grid">
+        <div class="feat reveal"><div class="feat-ico">📊</div><div class="feat-t">Registro Instantáneo</div><div class="feat-d">Un clic y tu caso queda registrado. Sin esperas, sin recargas. El contador sube al instante y tu progreso se actualiza en tiempo real.</div></div>
+        <div class="feat reveal"><div class="feat-ico">🏆</div><div class="feat-t">Ranking en Tiempo Real</div><div class="feat-d">Ve cómo vas respecto a tus compañeros. Por equipo o por turno. Actualiza con 🔄 cuando quieras. Medallas para el Top 3.</div></div>
+        <div class="feat reveal"><div class="feat-ico">🧘</div><div class="feat-t">Modo Foco</div><div class="feat-d">Sin ranking, sin comparaciones. Solo tu progreso, tu meta y un mensaje de calma. Diseñado para quienes prefieren concentrarse sin distracciones.</div></div>
+        <div class="feat reveal"><div class="feat-ico">🎯</div><div class="feat-t">Meta Personalizable</div><div class="feat-d">Configura tu meta diaria y ve tu avance en una barra visual con emoji personalizable. Sabe exactamente cuánto te falta.</div></div>
+        <div class="feat reveal"><div class="feat-ico">📝</div><div class="feat-t">Bloc de Notas</div><div class="feat-d">Anota recordatorios rápidos del turno. Se borran a medianoche automáticamente. Perfecto para lo que no puedes olvidar.</div></div>
+        <div class="feat reveal"><div class="feat-ico">🎨</div><div class="feat-t">Personalización Total</div><div class="feat-d">5 paletas de colores, modo oscuro/claro, 160+ avatares, colores custom. Tu extensión, tu estilo.</div></div>
+        <div class="feat reveal"><div class="feat-ico">📜</div><div class="feat-t">Historial Completo</div><div class="feat-d">Revisa tus casos de hoy, la semana o cualquier rango. Filtra por tipo con paginación inteligente.</div></div>
+        <div class="feat reveal"><div class="feat-ico">🔒</div><div class="feat-t">Datos Protegidos</div><div class="feat-d">Tus casos nunca se pierden. La sincronización inteligente nunca resta. Protección contra duplicados con confirmación.</div></div>
       </div>
     </div>
   </section>
 
-  <!-- ========== CÓMO USARLA ========== -->
+  <!-- CÓMO USARLA -->
   <section class="section section-alt" id="how-to">
     <div class="container">
-      <div class="section-header">
-        <div class="section-badge">📋 Guía</div>
-        <h2 class="section-title">Cómo Usarla</h2>
-        <p class="section-subtitle">En 5 pasos estás registrando casos</p>
+      <div class="section-header reveal">
+        <div class="section-badge">Guía Rápida</div>
+        <h2 class="section-title">De cero a productivo<br>en 5 pasos</h2>
       </div>
-
-      <div class="steps">
-        <div class="step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Instala la extensión</h3>
-            <p>Descarga Case Counter Pro desde la Chrome Web Store o instálala desde el archivo ZIP proporcionado. Aparecerá el ícono 📊 en tu barra de extensiones.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Inicia sesión</h3>
-            <p>Ingresa el LDAP de tu líder y tu LDAP personal. El sistema validará que estés registrado en el equipo. Solo necesitas hacerlo una vez.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Registra tu caso</h3>
-            <p>Escribe el <strong>Case ID</strong> del caso que gestionaste y el <strong>TMC</strong> (tiempo en minutos). Luego presiona <strong style="color:var(--meli-green)">📞 ON</strong> si fue llamada o <strong style="color:var(--meli-accent)">✉️ OFF</strong> si fue escrito.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h3>Observa tu progreso</h3>
-            <p>La barra de meta se actualiza al instante. El ranking del equipo se actualiza cada 30 segundos o cuando presiones 🔄. Verás tu posición vs tus compañeros.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-number">5</div>
-          <div class="step-content">
-            <h3>Personaliza tu experiencia</h3>
-            <p>En ⚙️ Ajustes cambia tu avatar, colores y tema. Si el ranking te genera ansiedad, activa el <strong>Modo Foco</strong> 👁️ desde la barra superior. Usa 📝 para notas rápidas.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="tip-box info" style="margin-top:32px;">
-        <span class="tip-box-icon">⌨️</span>
-        <div class="tip-box-content">
-          <h4>Atajo rápido</h4>
-          <p>Presiona <strong>Ctrl + Shift + C</strong> para abrir la extensión al instante desde cualquier pestaña.</p>
-        </div>
+      <div class="timeline reveal">
+        <div class="tl-step"><div class="tl-dot">1</div><h3>Instala la extensión</h3><p>Desde la Chrome Web Store o el archivo proporcionado. El ícono 📊 aparecerá en tu barra de extensiones.</p></div>
+        <div class="tl-step"><div class="tl-dot">2</div><h3>Inicia sesión</h3><p>El LDAP de tu líder y el tuyo. Solo una vez. El sistema valida que estés en el equipo.</p></div>
+        <div class="tl-step"><div class="tl-dot">3</div><h3>Registra tu caso</h3><p>Case ID + TMC en minutos → clic en ON u OFF. Un segundo y listo. Tu contador sube al instante.</p></div>
+        <div class="tl-step"><div class="tl-dot">4</div><h3>Observa tu progreso</h3><p>La barra de meta avanza. El ranking se actualiza. Ves tu posición. Todo en tiempo real.</p></div>
+        <div class="tl-step"><div class="tl-dot">5</div><h3>Hazla tuya</h3><p>Cambia avatar, colores, tema. Activa Modo Foco si el ranking no es lo tuyo. Usa notas para lo importante.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ========== SECCIÓN 2: DASHBOARD ========== -->
+  <!-- DASHBOARD -->
   <section class="section" id="dashboard">
     <div class="container">
-      <div class="section-header">
-        <div class="section-badge">📊 Sección 2</div>
-        <h2 class="section-title">El Dashboard</h2>
-        <p class="section-subtitle">Análisis profundo del uso de la extensión y su impacto en la productividad</p>
+      <div class="section-header reveal">
+        <div class="section-badge">El Dashboard</div>
+        <h2 class="section-title">Los datos que demuestran<br>que funciona</h2>
+        <p class="section-sub">Cruzamos los casos reales de productividad con los registros de la extensión para medir el impacto real</p>
       </div>
-
-      <div class="card">
-        <div class="card-title">🎯 ¿Qué mide?</div>
-        <p style="font-size:15px;color:var(--meli-muted);line-height:1.8;margin-bottom:20px;">
-          El Dashboard cruza los datos de productividad real (cuántos casos gestiona cada representante por día) 
-          con los datos de la extensión (cuántos de esos casos fueron registrados). La métrica principal es:
-        </p>
-        <div style="text-align:center;padding:24px;background:var(--meli-dark);border-radius:var(--radius);margin-bottom:20px;">
-          <div style="font-size:13px;color:var(--meli-muted);margin-bottom:8px;">MÉTRICA PRINCIPAL</div>
-          <div style="font-size:24px;font-weight:900;color:var(--meli-yellow);">Tasa de Uso = Casos Extensión ÷ Casos Cx × 100</div>
-        </div>
+      <div style="text-align:center;padding:32px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:36px;" class="reveal">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Métrica Principal</div>
+        <div style="font-size:clamp(20px,3vw,28px);font-weight:900;color:var(--y);">Tasa de Uso = Casos Extensión ÷ Casos Cx × 100</div>
       </div>
-
-      <!-- SEMÁFORO -->
-      <div class="semaforo">
-        <div class="semaforo-item green">
-          <div class="semaforo-emoji">🟢</div>
-          <div class="semaforo-label">En Meta</div>
-          <div class="semaforo-range">≥ 80%</div>
-          <div class="semaforo-desc">Excelente uso de la herramienta</div>
-        </div>
-        <div class="semaforo-item orange">
-          <div class="semaforo-emoji">🟠</div>
-          <div class="semaforo-label">Atención</div>
-          <div class="semaforo-range">40 - 79%</div>
-          <div class="semaforo-desc">Oportunidad de mejora</div>
-        </div>
-        <div class="semaforo-item red">
-          <div class="semaforo-emoji">🔴</div>
-          <div class="semaforo-label">Crítico</div>
-          <div class="semaforo-range">< 40%</div>
-          <div class="semaforo-desc">Requiere acompañamiento</div>
-        </div>
+      <div class="sema reveal">
+        <div class="sema-i g"><div class="sema-em">🟢</div><div class="sema-l">En Meta</div><div class="sema-v">≥ 80%</div><div class="sema-d">Excelente uso</div></div>
+        <div class="sema-i o"><div class="sema-em">🟠</div><div class="sema-l">Atención</div><div class="sema-v">40-79%</div><div class="sema-d">Oportunidad de mejora</div></div>
+        <div class="sema-i r"><div class="sema-em">🔴</div><div class="sema-l">Crítico</div><div class="sema-v">&lt;40%</div><div class="sema-d">Requiere acompañamiento</div></div>
       </div>
-
-      <!-- 4 TABS -->
-      <div style="margin-top:48px;">
-        <h3 style="font-size:22px;font-weight:800;margin-bottom:24px;text-align:center;">📋 Las 4 Pantallas del Dashboard</h3>
-        <div class="tab-grid">
-          <div class="tab-card">
-            <div class="tab-card-header"><div class="tab-card-number">1</div><div class="tab-card-title">📈 Resumen</div></div>
-            <ul class="tab-card-features">
-              <li>📊 5 KPIs principales</li><li>📈 Tendencia del mes vs meta 80%</li>
-              <li>🏆 Ranking de reps con medallas</li><li>📸 Captura HD para compartir</li>
-              <li>🎯 Productividad por representante</li>
-            </ul>
-          </div>
-          <div class="tab-card">
-            <div class="tab-card-header"><div class="tab-card-number">2</div><div class="tab-card-title">📅 Detalle por Día</div></div>
-            <ul class="tab-card-features">
-              <li>◀▶ Navegador de días</li><li>📋 Tabla detallada por rep</li>
-              <li>📊 Modal Histórico del Mes</li><li>🏅 Comparativa de Líderes</li>
-              <li>🌡️ Celdas con semáforo de color</li>
-            </ul>
-          </div>
-          <div class="tab-card">
-            <div class="tab-card-header"><div class="tab-card-number">3</div><div class="tab-card-title">⚡ Tiempo Real</div></div>
-            <ul class="tab-card-features">
-              <li>🔴 Auto-refresh cada 60 segundos</li><li>🧠 Insights automáticos de actividad</li>
-              <li>📊 Distribución horaria y por canal</li><li>🏆 Ranking del día (Mi Equipo + Todos)</li>
-              <li>⚠️ Alertas de inactividad (30min/1h)</li>
-            </ul>
-          </div>
-          <div class="tab-card">
-            <div class="tab-card-header"><div class="tab-card-number">4</div><div class="tab-card-title">💡 ¿Por qué extensión?</div></div>
-            <ul class="tab-card-features">
-              <li>📊 Análisis por nivel de uso</li><li>🏆 TOP 10 más productivos</li>
-              <li>🧠 Insights automáticos</li><li>📈 Correlación uso ↔ productividad</li>
-              <li>💪 Mensaje motivacional</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="tip-box warning" style="margin-top:32px;">
-        <span class="tip-box-icon">📸</span>
-        <div class="tip-box-content">
-          <h4>Capturas HD</h4>
-          <p>Cada sección del dashboard tiene un botón 📸 que genera una imagen PNG de alta resolución (4x) perfecta para compartir en Slack o en reuniones de equipo.</p>
-        </div>
+      <h3 style="font-size:24px;font-weight:800;text-align:center;margin:48px 0 28px;" class="reveal">Las 4 Pantallas del Dashboard</h3>
+      <div class="tabs reveal">
+        <div class="tab"><div class="tab-h"><div class="tab-n">1</div><div class="tab-t">📈 Resumen</div></div><ul><li>📊 5 KPIs principales del equipo</li><li>📈 Tendencia del mes vs meta 80%</li><li>🏆 Ranking con medallas 🥇🥈🥉</li><li>📸 Captura HD para compartir</li></ul></div>
+        <div class="tab"><div class="tab-h"><div class="tab-n">2</div><div class="tab-t">📅 Detalle por Día</div></div><ul><li>◀▶ Navegador de días</li><li>📋 Tabla detallada por representante</li><li>📊 Histórico del Mes completo</li><li>🏅 Comparativa entre Líderes</li></ul></div>
+        <div class="tab"><div class="tab-h"><div class="tab-n">3</div><div class="tab-t">⚡ Tiempo Real</div></div><ul><li>🔴 Auto-refresh cada 60 segundos</li><li>🧠 Insights automáticos</li><li>📊 Distribución horaria y por canal</li><li>⚠️ Alertas de inactividad</li></ul></div>
+        <div class="tab"><div class="tab-h"><div class="tab-n">4</div><div class="tab-t">💡 ¿Por qué extensión?</div></div><ul><li>📊 Análisis por nivel de uso</li><li>🏆 TOP 10 más productivos</li><li>📈 Correlación uso ↔ productividad</li><li>💪 Insights y motivación</li></ul></div>
       </div>
     </div>
   </section>
 
-  <!-- ========== DASHBOARDS EN VIVO ========== -->
-  <section class="section section-alt" id="dashboards-live">
+  <!-- RESULTADOS REALES -->
+  <section class="section section-alt" id="results">
     <div class="container">
-      <div class="section-header">
-        <div class="section-badge">🚀 Acceso Directo</div>
-        <h2 class="section-title">Dashboards en Vivo</h2>
-        <p class="section-subtitle">Accede directamente a las herramientas de análisis</p>
+      <div class="section-header reveal">
+        <div class="section-badge">🏆 Resultados Reales</div>
+        <h2 class="section-title">Los datos hablan<br>por sí solos</h2>
+        <p class="section-sub">No son maquetas. Son dashboards en producción con datos reales de +60 representantes y +40,000 registros</p>
       </div>
-
-      <div class="dashboard-links">
-        <a href="https://script.google.com/a/macros/mercadolibre.com.co/s/AKfycbxFM0KNNbSwyVL7Lrf4rW631tT_gPzzLE8WkhCD3YlOlqRokNbiZDi8vskROLZxkShK/exec" target="_blank" class="dashboard-link">
-          <div class="dashboard-link-icon">📋</div>
-          <div class="dashboard-link-title">Dashboard Resumen</div>
-          <div class="dashboard-link-desc">Vista rápida con KPIs principales, ranking de líderes por turno y tasa de uso general del equipo. Ideal para reuniones de seguimiento.</div>
-          <div class="dashboard-link-cta">Abrir Dashboard →</div>
+      <div class="dash-grid reveal">
+        <a href="https://script.google.com/a/macros/mercadolibre.com.co/s/AKfycbxFM0KNNbSwyVL7Lrf4rW631tT_gPzzLE8WkhCD3YlOlqRokNbiZDi8vskROLZxkShK/exec" target="_blank" class="dash-card">
+          <div class="dash-ico">📋</div>
+          <div class="dash-t">Dashboard Resumen</div>
+          <div class="dash-d">Vista ejecutiva con KPIs principales, ranking de líderes por turno y tasa de uso general. Ideal para seguimiento rápido y reuniones.</div>
+          <div class="dash-cta">Ver resultados →</div>
         </a>
-        <a href="https://script.google.com/a/macros/mercadolibre.com.co/s/AKfycbymiGyX9gRRZM1oge9tY6rR1ohen69BxXAguHpBlViW2NdNxjCFzqfkvF_gMinfQJ1Q/exec" target="_blank" class="dashboard-link">
-          <div class="dashboard-link-icon">📊</div>
-          <div class="dashboard-link-title">Dashboard Completo</div>
-          <div class="dashboard-link-desc">Análisis profundo con 4 pestañas: Resumen, Detalle por Día, Tiempo Real y correlación de uso vs productividad. Incluye capturas HD.</div>
-          <div class="dashboard-link-cta">Abrir Dashboard →</div>
+        <a href="https://script.google.com/a/macros/mercadolibre.com.co/s/AKfycbymiGyX9gRRZM1oge9tY6rR1ohen69BxXAguHpBlViW2NdNxjCFzqfkvF_gMinfQJ1Q/exec" target="_blank" class="dash-card">
+          <div class="dash-ico">📊</div>
+          <div class="dash-t">Dashboard Completo</div>
+          <div class="dash-d">Análisis profundo: 4 pestañas, tiempo real, correlación uso ↔ productividad, comparativas entre equipos y capturas HD.</div>
+          <div class="dash-cta">Ver análisis completo →</div>
         </a>
       </div>
-
-      <div class="tip-box info">
-        <span class="tip-box-icon">🔑</span>
-        <div class="tip-box-content">
-          <h4>Acceso</h4>
-          <p>Los dashboards requieren cuenta de Mercado Libre (@mercadolibre.com.co). Si es tu primera vez, es posible que debas autorizar permisos de Google.</p>
-        </div>
+      <div class="tip info reveal">
+        <span class="tip-ico">🔑</span>
+        <div class="tip-c"><h4>Acceso</h4><p>Requiere cuenta @mercadolibre.com.co. Si es tu primera vez, autoriza los permisos de Google cuando se soliciten.</p></div>
       </div>
     </div>
   </section>
 
-<!-- ========== FAQ ========== -->
+  <!-- FAQ -->
   <section class="section" id="faq">
     <div class="container">
-      <div class="section-header">
-        <div class="section-badge">❓ Preguntas Frecuentes</div>
-        <h2 class="section-title">FAQ</h2>
-        <p class="section-subtitle">Respuestas a las dudas más comunes</p>
+      <div class="section-header reveal">
+        <div class="section-badge">FAQ</div>
+        <h2 class="section-title">Preguntas Frecuentes</h2>
       </div>
-
-      <div class="faq-list">
-        <div class="faq-item">
-          <div class="faq-question"><span>¿Se pierden mis casos si cierro la extensión?</span><span class="faq-arrow">▼</span></div>
-          <div class="faq-answer"><div class="faq-answer-inner">No. Todos los casos se guardan en Google Sheets y en tu almacenamiento local. La sincronización inteligente garantiza que nunca se resten casos. Tus datos están seguros incluso si cierras y abres la extensión.</div></div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question"><span>¿Qué pasa a medianoche?</span><span class="faq-arrow">▼</span></div>
-          <div class="faq-answer"><div class="faq-answer-inner">Los contadores, el historial del día y las notas se resetean automáticamente a las 00:00. Tus datos históricos permanecen guardados en la hoja principal. Al abrir la extensión en un nuevo día, empiezas en 0 limpio.</div></div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question"><span>¿Puedo registrar el mismo caso dos veces?</span><span class="faq-arrow">▼</span></div>
-          <div class="faq-answer"><div class="faq-answer-inner">Sí, pero la extensión te mostrará un aviso: "Este caso ya fue registrado hoy". Si confirmas, se registra. Esto es útil para casos que requieren múltiples gestiones en el mismo día.</div></div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question"><span>¿El ranking me genera ansiedad, qué hago?</span><span class="faq-arrow">▼</span></div>
-          <div class="faq-answer"><div class="faq-answer-inner">Activa el <strong>Modo Foco</strong> presionando el ícono 👁️ en la barra superior. Verás solo tu progreso personal sin ranking ni comparaciones. Incluye mensajes de calma y una animación de respiración. Un caso a la vez. 🌿</div></div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question"><span>¿Qué es la "Tasa de Uso de Extensión"?</span><span class="faq-arrow">▼</span></div>
-          <div class="faq-answer"><div class="faq-answer-inner">Es la relación entre los casos que registraste en la extensión vs el total de casos que gestionaste según el sistema de Mercado Libre. La meta es ≥80%. Ejemplo: si gestionaste 10 casos y registraste 8 en la extensión, tu tasa es 80% 🟢.</div></div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question"><span>¿Qué significa ON, OFF y Level Up?</span><span class="faq-arrow">▼</span></div>
-          <div class="faq-answer"><div class="faq-answer-inner"><strong>ON (📞)</strong>: Caso gestionado por llamada telefónica.<br><strong>OFF (✉️)</strong>: Caso gestionado por escrito (chat, email, mensaje).<br><strong>Level Up (⭐)</strong>: Caso donde aplicaste "Estilo Meli" — activa el toggle antes de registrar.</div></div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question"><span>¿Puedo eliminar un caso registrado por error?</span><span class="faq-arrow">▼</span></div>
-          <div class="faq-answer"><div class="faq-answer-inner">Sí. Presiona el ícono 🗑️ al lado del campo de registro. Se mostrará el detalle del último caso registrado y podrás confirmar la eliminación. Solo puedes eliminar el último caso del día.</div></div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question"><span>¿Quién puede ver mis datos?</span><span class="faq-arrow">▼</span></div>
-          <div class="faq-answer"><div class="faq-answer-inner">Tu líder de equipo y el supervisor pueden ver los datos del equipo a través del dashboard. El ranking dentro de la extensión es visible solo para los miembros de tu mismo equipo. Los datos se almacenan en Google Sheets con acceso controlado.</div></div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question"><span>¿Qué es el periodo de adaptación (ADAPT)?</span><span class="faq-arrow">▼</span></div>
-          <div class="faq-answer"><div class="faq-answer-inner">Cuando un representante empieza a usar la extensión, se configura una fecha de inicio (FECHA_INICIO_EXT). Los días anteriores a esa fecha aparecen como "ADAPT" en el dashboard y no penalizan tu tasa de uso. Es un período de aprendizaje.</div></div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question"><span>¿El dashboard funciona en celular?</span><span class="faq-arrow">▼</span></div>
-          <div class="faq-answer"><div class="faq-answer-inner">Sí. El dashboard tiene diseño responsive y se adapta a escritorio, tablet y móvil. La extensión de Chrome solo funciona en computador de escritorio o laptop.</div></div>
-        </div>
+      <div class="faq-list reveal">
+        <div class="faq-i"><div class="faq-q"><span>¿Se pierden mis casos si cierro la extensión?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">No. Todos los casos se guardan en Google Sheets y en tu almacenamiento local. La sincronización inteligente garantiza que nunca se resten casos. Al abrir la extensión, tus datos están ahí.</div></div></div>
+        <div class="faq-i"><div class="faq-q"><span>¿Qué pasa a medianoche?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Los contadores se resetean automáticamente. Tus datos históricos se mantienen guardados. Cada día empiezas limpio, listo para un nuevo turno.</div></div></div>
+        <div class="faq-i"><div class="faq-q"><span>¿Puedo registrar el mismo caso dos veces?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Sí. La extensión te avisará que ya existe y preguntará si quieres registrarlo de nuevo. Útil para casos con múltiples gestiones en el día.</div></div></div>
+        <div class="faq-i"><div class="faq-q"><span>El ranking me genera ansiedad, ¿qué hago?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Activa el <strong>Modo Foco</strong> 👁️ en la barra superior. Verás solo tu progreso sin ranking ni comparaciones. Incluye mensajes de calma y una animación de respiración. Un caso a la vez. 🌿</div></div></div>
+        <div class="faq-i"><div class="faq-q"><span>¿Qué es la "Tasa de Uso de Extensión"?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Es la relación entre los casos que registraste en la extensión vs los que gestionaste en el sistema de Mercado Libre. Meta: ≥80%. Si gestionaste 10 y registraste 8, tu tasa es 80% 🟢.</div></div></div>
+        <div class="faq-i"><div class="faq-q"><span>¿Puedo eliminar un caso registrado por error?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Sí. Presiona 🗑️ junto al campo de registro. Verás el detalle del último caso y podrás confirmar la eliminación.</div></div></div>
+        <div class="faq-i"><div class="faq-q"><span>¿Quién puede ver mis datos?</span><span class="faq-arr">▼</span></div><div class="faq-a"><div class="faq-a-in">Tu líder de equipo a través del dashboard. El ranking dentro de la extensión solo es visible para tu mismo equipo. Tus datos están en Google Sheets con acceso controlado.</div></div></div>
       </div>
     </div>
   </section>
 
-  <!-- ========== FOOTER ========== -->
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-logo">📊</div>
-    <div class="footer-title">Case Counter Pro v3.3.0</div>
-    <div class="footer-creator">Creado por <strong>Juan Sebastián Guerrero Rodríguez</strong></div>
-    <div class="footer-team">Equipo Publicaciones Mature — Mercado Libre</div>
-    <div class="footer-divider"></div>
-    <div class="footer-team">Supervisor: <strong>Andres Mauricio Martinez Rubiano</strong></div>
-    <div class="footer-team">Equipo: <strong>Envíos Mature</strong></div>
-    <div class="footer-divider"></div>
-    <div class="footer-copy">© 2025-2026 Case Counter Pro. Herramienta interna de Mercado Libre.</div>
+    <div class="footer-t">Case Counter Pro</div>
+    <div class="footer-a">Creado por <strong>Juan Sebastián Guerrero Rodríguez</strong></div>
+    <div class="footer-a">Equipo Publicaciones Mature — Mercado Libre</div>
+    <div class="footer-div"></div>
+    <div class="footer-a">Supervisor: <strong>Andres Mauricio Martinez Rubiano</strong></div>
+    <div class="footer-a">Equipos: <strong>Publicaciones Mature · Envíos Mature</strong></div>
+    <div class="footer-div"></div>
+    <div class="footer-copy">© 2025-2026 Case Counter Pro · +60 representantes · +40,000 registros · +10 equipos</div>
   </footer>
 
-  <!-- ========== JAVASCRIPT ========== -->
+  <!-- JAVASCRIPT -->
   <script>
-    // FAQ accordion
-    document.querySelectorAll('.faq-question').forEach(function(q) {
-      q.addEventListener('click', function() {
-        var item = q.parentElement;
-        var isOpen = item.classList.contains('open');
-        // Close all
-        document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
-        // Toggle current
-        if (!isOpen) item.classList.add('open');
+    // FAQ
+    document.querySelectorAll('.faq-q').forEach(function(q){
+      q.addEventListener('click',function(){
+        var item=q.parentElement,open=item.classList.contains('open');
+        document.querySelectorAll('.faq-i').forEach(function(i){i.classList.remove('open');});
+        if(!open)item.classList.add('open');
       });
     });
 
-    // Smooth scroll for nav links
-    document.querySelectorAll('a[href^="#"]').forEach(function(a) {
-      a.addEventListener('click', function(e) {
-        var target = document.querySelector(a.getAttribute('href'));
-        if (target) { e.preventDefault(); target.scrollIntoView({ behavior:'smooth', block:'start' }); }
-      });
+    // Nav scroll
+    var nav=document.getElementById('mainNav');
+    window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>60);});
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener('click',function(e){var t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}});
     });
 
-    // Nav background on scroll
-    var nav = document.querySelector('.nav');
-    window.addEventListener('scroll', function() {
-      if (window.scrollY > 50) nav.style.borderBottomColor = 'rgba(255,230,0,0.1)';
-      else nav.style.borderBottomColor = 'var(--meli-border)';
+    // TOC card mouse glow
+    document.querySelectorAll('.toc-card').forEach(function(card){
+      card.addEventListener('mousemove',function(e){var r=card.getBoundingClientRect();card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');});
     });
+
+    // Scroll reveal
+    var reveals=document.querySelectorAll('.reveal');
+    var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target);}});},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+    reveals.forEach(function(el){observer.observe(el);});
   </script>
 
 </body>
