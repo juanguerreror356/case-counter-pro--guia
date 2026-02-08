@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Case Counter Pro — Documentación</title>
+  <meta name="description" content="Herramienta de gestión de productividad para equipos de servicio al cliente de Mercado Libre"/>
+  <meta name="author" content="Juan Sebastián Guerrero Rodríguez"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>"/>
+  <style>
+    /* ========== VARIABLES ========== */
+    :root {
+      --meli-yellow: #FFE600;
+      --meli-blue: #2D3277;
+      --meli-dark: #0B0E1A;
+      --meli-card: #12152A;
+      --meli-border: #1E2245;
+      --meli-text: #E8E8F0;
+      --meli-muted: #8B8DA3;
+      --meli-green: #00C853;
+      --meli-orange: #FF9800;
+      --meli-red: #F44336;
+      --meli-accent: #3B82F6;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+      --max-width: 1100px;
+    }
+
+    /* ========== RESET ========== */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--meli-dark); color: var(--meli-text);
+      line-height: 1.7; -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========== NAV STICKY ========== */
+    .nav {
+      position: fixed; top:0; left:0; right:0; z-index:1000;
+      background: rgba(11,14,26,0.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--meli-border); padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: var(--max-width); margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-logo-icon { font-size:28px; }
+    .nav-logo-text { font-size:18px; font-weight:800; color:var(--meli-yellow); }
+    .nav-logo-version { font-size:11px; font-weight:600; color:var(--meli-muted); background:var(--meli-border); padding:2px 8px; border-radius:20px; }
+    .nav-links { display:flex; gap:8px; }
+    .nav-links a {
+      color:var(--meli-muted); text-decoration:none; font-size:13px; font-weight:600;
+      padding:8px 14px; border-radius:8px; transition:all 0.2s;
+    }
+    .nav-links a:hover { color:var(--meli-yellow); background:rgba(255,230,0,0.08); }
+
+    /* ========== HERO ========== */
+    .hero {
+      position:relative; padding:140px 24px 80px; text-align:center;
+      background: linear-gradient(135deg, var(--meli-dark) 0%, #0D1230 50%, #111640 100%);
+      overflow:hidden;
+    }
+    .hero::before {
+      content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+      background: radial-gradient(circle at 30% 50%, rgba(255,230,0,0.03) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 50%, rgba(45,50,119,0.05) 0%, transparent 50%);
+      animation: heroFloat 20s ease-in-out infinite;
+    }
+    @keyframes heroFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-2%,1%)} }
+    .hero-content { position:relative; z-index:2; max-width:800px; margin:0 auto; }
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:8px; padding:8px 20px;
+      background:rgba(255,230,0,0.1); border:1px solid rgba(255,230,0,0.2);
+      border-radius:30px; font-size:13px; font-weight:600; color:var(--meli-yellow);
+      margin-bottom:24px;
+    }
+    .hero-badge-dot { width:8px; height:8px; background:var(--meli-green); border-radius:50%; animation:blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .hero h1 { font-size:clamp(32px,5vw,56px); font-weight:900; line-height:1.1; margin-bottom:20px; }
+    .hero h1 .highlight { color:var(--meli-yellow); }
+    .hero-subtitle { font-size:clamp(16px,2.5vw,20px); color:var(--meli-muted); max-width:600px; margin:0 auto 32px; line-height:1.6; }
+    .hero-stats { display:flex; justify-content:center; gap:40px; flex-wrap:wrap; margin-bottom:40px; }
+    .hero-stat { text-align:center; }
+    .hero-stat-value { font-size:36px; font-weight:900; color:var(--meli-yellow); line-height:1; }
+    .hero-stat-label { font-size:12px; color:var(--meli-muted); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+    .hero-cta { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+    .btn-hero {
+      display:inline-flex; align-items:center; gap:8px; padding:14px 28px;
+      border-radius:var(--radius); font-size:15px; font-weight:700;
+      text-decoration:none; transition:all 0.3s; border:2px solid transparent;
+    }
+    .btn-hero.primary { background:var(--meli-yellow); color:var(--meli-dark); }
+    .btn-hero.primary:hover { transform:translateY(-3px); box-shadow:0 12px 30px rgba(255,230,0,0.3); }
+    .btn-hero.secondary { background:transparent; color:var(--meli-text); border-color:var(--meli-border); }
+    .btn-hero.secondary:hover { border-color:var(--meli-yellow); color:var(--meli-yellow); transform:translateY(-3px); }
+
+    /* ========== CONTAINER ========== */
+    .container { max-width:var(--max-width); margin:0 auto; padding:0 24px; }
+
+    /* ========== TABLE OF CONTENTS ========== */
+    .toc-section { padding:60px 0; }
+    .toc-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
+    .toc-card {
+      display:flex; align-items:center; gap:16px; padding:20px;
+      background:var(--meli-card); border:1px solid var(--meli-border);
+      border-radius:var(--radius); text-decoration:none; color:var(--meli-text);
+      transition:all 0.3s;
+    }
+    .toc-card:hover { border-color:var(--meli-yellow); transform:translateY(-4px); box-shadow:var(--shadow); }
+    .toc-card-icon { font-size:36px; flex-shrink:0; }
+    .toc-card-text h3 { font-size:16px; font-weight:700; margin-bottom:4px; }
+    .toc-card-text p { font-size:13px; color:var(--meli-muted); }
+
+    /* ========== SECTIONS ========== */
+    .section { padding:80px 0; }
+    .section-alt { background:linear-gradient(180deg, rgba(18,21,42,0.5) 0%, var(--meli-dark) 100%); }
+    .section-header { text-align:center; margin-bottom:48px; }
+    .section-badge {
+      display:inline-flex; align-items:center; gap:6px; padding:6px 16px;
+      background:rgba(255,230,0,0.08); border:1px solid rgba(255,230,0,0.15);
+      border-radius:20px; font-size:12px; font-weight:700; color:var(--meli-yellow);
+      text-transform:uppercase; letter-spacing:1px; margin-bottom:16px;
+    }
+    .section-title { font-size:clamp(28px,4vw,40px); font-weight:900; margin-bottom:12px; line-height:1.2; }
+    .section-subtitle { font-size:16px; color:var(--meli-muted); max-width:600px; margin:0 auto; }
+
+    /* ========== CARDS ========== */
+    .card {
+      background:var(--meli-card); border:1px solid var(--meli-border);
+      border-radius:var(--radius-lg); padding:28px; margin-bottom:24px;
+      transition:all 0.3s;
+    }
+    .card:hover { border-color:rgba(255,230,0,0.2); }
+    .card-title { font-size:20px; font-weight:800; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+
+    /* ========== FEATURE GRID ========== */
+    .feature-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+    .feature-card {
+      background:var(--meli-card); border:1px solid var(--meli-border);
+      border-radius:var(--radius-lg); padding:28px; transition:all 0.3s; position:relative; overflow:hidden;
+    }
+    .feature-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg, var(--meli-yellow), var(--meli-blue));
+      opacity:0; transition:opacity 0.3s;
+    }
+    .feature-card:hover { border-color:rgba(255,230,0,0.2); transform:translateY(-4px); box-shadow:var(--shadow); }
+    .feature-card:hover::before { opacity:1; }
+    .feature-icon { font-size:40px; margin-bottom:16px; }
+    .feature-title { font-size:17px; font-weight:700; margin-bottom:8px; }
+    .feature-text { font-size:14px; color:var(--meli-muted); line-height:1.6; }
+
+    /* ========== STEPS ========== */
+    .steps { display:flex; flex-direction:column; gap:24px; }
+    .step {
+      display:flex; gap:20px; padding:24px;
+      background:var(--meli-card); border:1px solid var(--meli-border);
+      border-radius:var(--radius-lg); transition:all 0.3s;
+    }
+    .step:hover { border-color:rgba(255,230,0,0.2); }
+    .step-number {
+      width:48px; height:48px; min-width:48px; display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg, var(--meli-yellow), #FFC400);
+      color:var(--meli-dark); font-size:20px; font-weight:900;
+      border-radius:12px;
+    }
+    .step-content h3 { font-size:16px; font-weight:700; margin-bottom:6px; }
+    .step-content p { font-size:14px; color:var(--meli-muted); line-height:1.6; }
+
+    /* ========== TIP BOXES ========== */
+    .tip-box {
+      display:flex; gap:16px; padding:20px; border-radius:var(--radius);
+      margin:24px 0; border-left:4px solid;
+    }
+    .tip-box.info { background:rgba(59,130,246,0.08); border-color:var(--meli-accent); }
+    .tip-box.success { background:rgba(0,200,83,0.08); border-color:var(--meli-green); }
+    .tip-box.warning { background:rgba(255,152,0,0.08); border-color:var(--meli-orange); }
+    .tip-box.danger { background:rgba(244,67,54,0.08); border-color:var(--meli-red); }
+    .tip-box-icon { font-size:24px; flex-shrink:0; }
+    .tip-box-content h4 { font-size:14px; font-weight:700; margin-bottom:4px; }
+    .tip-box-content p { font-size:13px; color:var(--meli-muted); line-height:1.6; }
+
+    /* ========== SEMÁFORO ========== */
+    .semaforo { display:flex; gap:16px; flex-wrap:wrap; margin:24px 0; }
+    .semaforo-item {
+      flex:1; min-width:160px; padding:20px; text-align:center;
+      border-radius:var(--radius); border:2px solid;
+    }
+    .semaforo-item.green { border-color:var(--meli-green); background:rgba(0,200,83,0.05); }
+    .semaforo-item.orange { border-color:var(--meli-orange); background:rgba(255,152,0,0.05); }
+    .semaforo-item.red { border-color:var(--meli-red); background:rgba(244,67,54,0.05); }
+    .semaforo-emoji { font-size:32px; margin-bottom:8px; }
+    .semaforo-label { font-size:14px; font-weight:700; margin-bottom:4px; }
+    .semaforo-range { font-size:24px; font-weight:900; }
+    .semaforo-desc { font-size:12px; color:var(--meli-muted); margin-top:4px; }
+
+    /* ========== TAB CARDS ========== */
+    .tab-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+    .tab-card {
+      padding:24px; background:var(--meli-card); border:1px solid var(--meli-border);
+      border-radius:var(--radius-lg); border-top:3px solid var(--meli-yellow); transition:all 0.3s;
+    }
+    .tab-card:hover { transform:translateY(-4px); box-shadow:var(--shadow); }
+    .tab-card-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .tab-card-number { width:28px; height:28px; display:flex; align-items:center; justify-content:center; background:var(--meli-yellow); color:var(--meli-dark); font-size:13px; font-weight:900; border-radius:8px; }
+    .tab-card-title { font-size:15px; font-weight:700; }
+    .tab-card-features { list-style:none; }
+    .tab-card-features li { font-size:13px; color:var(--meli-muted); padding:6px 0; border-bottom:1px solid var(--meli-border); display:flex; align-items:flex-start; gap:8px; }
+    .tab-card-features li:last-child { border-bottom:none; }
+
+    /* ========== DASHBOARD LINKS ========== */
+    .dashboard-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; margin:40px 0; }
+    .dashboard-link {
+      display:flex; flex-direction:column; gap:16px; padding:32px;
+      background:linear-gradient(135deg, var(--meli-card), rgba(45,50,119,0.2));
+      border:2px solid var(--meli-border); border-radius:var(--radius-lg);
+      text-decoration:none; color:var(--meli-text); transition:all 0.3s; position:relative; overflow:hidden;
+    }
+    .dashboard-link::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--meli-yellow), var(--meli-blue)); }
+    .dashboard-link:hover { border-color:var(--meli-yellow); transform:translateY(-6px); box-shadow:0 16px 40px rgba(255,230,0,0.15); }
+    .dashboard-link-icon { font-size:48px; }
+    .dashboard-link-title { font-size:20px; font-weight:800; }
+    .dashboard-link-desc { font-size:14px; color:var(--meli-muted); line-height:1.6; }
+    .dashboard-link-cta { display:inline-flex; align-items:center; gap:8px; color:var(--meli-yellow); font-size:14px; font-weight:700; }
+
+    /* ========== FAQ ========== */
+    .faq-list { display:flex; flex-direction:column; gap:12px; }
+    .faq-item { background:var(--meli-card); border:1px solid var(--meli-border); border-radius:var(--radius); overflow:hidden; }
+    .faq-question {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:20px 24px; cursor:pointer; font-size:15px; font-weight:600;
+      transition:all 0.2s; user-select:none;
+    }
+    .faq-question:hover { background:rgba(255,230,0,0.03); }
+    .faq-arrow { font-size:18px; transition:transform 0.3s; }
+    .faq-item.open .faq-arrow { transform:rotate(180deg); }
+    .faq-answer { max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
+    .faq-item.open .faq-answer { max-height:500px; }
+    .faq-answer-inner { padding:0 24px 20px; font-size:14px; color:var(--meli-muted); line-height:1.7; }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      padding:60px 24px; text-align:center;
+      background:linear-gradient(180deg, var(--meli-dark), #080A14);
+      border-top:1px solid var(--meli-border);
+    }
+    .footer-logo { font-size:48px; margin-bottom:16px; }
+    .footer-title { font-size:20px; font-weight:800; color:var(--meli-yellow); margin-bottom:8px; }
+    .footer-creator { font-size:14px; color:var(--meli-muted); margin-bottom:4px; }
+    .footer-team { font-size:13px; color:var(--meli-muted); }
+    .footer-divider { width:60px; height:2px; background:var(--meli-border); margin:24px auto; }
+    .footer-copy { font-size:12px; color:var(--meli-muted); }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width:768px) {
+      .nav-links { display:none; }
+      .hero { padding:120px 16px 60px; }
+      .hero-stats { gap:24px; }
+      .section { padding:48px 0; }
+      .feature-grid { grid-template-columns:1fr; }
+      .tab-grid { grid-template-columns:1fr; }
+      .dashboard-links { grid-template-columns:1fr; }
+      .semaforo { flex-direction:column; }
+      .step { flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAV ========== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#top" class="nav-logo">
+        <span class="nav-logo-icon">📊</span>
+        <span class="nav-logo-text">Case Counter Pro</span>
+        <span class="nav-logo-version">v3.3</span>
+      </a>
+      <div class="nav-links">
+        <a href="#extension">🔧 Extensión</a>
+        <a href="#dashboard">📊 Dashboard</a>
+        <a href="#dashboards-live">🚀 Ver en Vivo</a>
+        <a href="#faq">❓ FAQ</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="top">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Herramienta en Producción — Mercado Libre
+      </div>
+      <h1>Gestión de Productividad <span class="highlight">Inteligente</span></h1>
+      <p class="hero-subtitle">
+        Extensión de Chrome + Dashboard analítico que conecta a los representantes de servicio al cliente 
+        con su rendimiento en tiempo real. Datos que generan valor, no presión.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-value">95+</div><div class="hero-stat-label">Representantes</div></div>
+        <div class="hero-stat"><div class="hero-stat-value">50K+</div><div class="hero-stat-label">Registros/mes</div></div>
+        <div class="hero-stat"><div class="hero-stat-value">2</div><div class="hero-stat-label">Turnos Activos</div></div>
+        <div class="hero-stat"><div class="hero-stat-value">7</div><div class="hero-stat-label">Equipos</div></div>
+      </div>
+      <div class="hero-cta">
+        <a href="#dashboards-live" class="btn-hero primary">🚀 Ver Dashboards en Vivo</a>
+        <a href="#extension" class="btn-hero secondary">📖 Leer Documentación</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TABLE OF CONTENTS ========== -->
+  <section class="toc-section">
+    <div class="container">
+      <div class="toc-grid">
+        <a href="#extension" class="toc-card">
+          <span class="toc-card-icon">🔧</span>
+          <div class="toc-card-text"><h3>La Extensión</h3><p>Qué es, cómo funciona y por qué es importante</p></div>
+        </a>
+        <a href="#features" class="toc-card">
+          <span class="toc-card-icon">✨</span>
+          <div class="toc-card-text"><h3>Funcionalidades</h3><p>Ranking, modo foco, notas, personalización</p></div>
+        </a>
+        <a href="#how-to" class="toc-card">
+          <span class="toc-card-icon">📋</span>
+          <div class="toc-card-text"><h3>Cómo Usarla</h3><p>Guía paso a paso para registrar casos</p></div>
+        </a>
+        <a href="#dashboard" class="toc-card">
+          <span class="toc-card-icon">📊</span>
+          <div class="toc-card-text"><h3>El Dashboard</h3><p>Análisis completo de uso y productividad</p></div>
+        </a>
+        <a href="#dashboards-live" class="toc-card">
+          <span class="toc-card-icon">🚀</span>
+          <div class="toc-card-text"><h3>Dashboards en Vivo</h3><p>Acceso directo a las herramientas</p></div>
+        </a>
+        <a href="#faq" class="toc-card">
+          <span class="toc-card-icon">❓</span>
+          <div class="toc-card-text"><h3>Preguntas Frecuentes</h3><p>Respuestas a las dudas más comunes</p></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECCIÓN 1: EXTENSIÓN ========== -->
+  <section class="section section-alt" id="extension">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">🔧 Sección 1</div>
+        <h2 class="section-title">La Extensión de Chrome</h2>
+        <p class="section-subtitle">Una herramienta que pone al representante en el centro, con datos que empoderan en vez de presionar</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🎯 ¿Qué es Case Counter Pro?</div>
+        <p style="font-size:15px;color:var(--meli-muted);line-height:1.8;margin-bottom:20px;">
+          Case Counter Pro es una <strong style="color:var(--meli-text)">extensión de Google Chrome</strong> diseñada para representantes de servicio al cliente de Mercado Libre. 
+          Permite registrar cada caso gestionado con un solo clic, generando datos en tiempo real sobre productividad, tipo de caso y rendimiento comparativo.
+        </p>
+        <p style="font-size:15px;color:var(--meli-muted);line-height:1.8;">
+          No es una herramienta de vigilancia. Es una <strong style="color:var(--meli-yellow)">herramienta de empoderamiento</strong>: cada representante puede ver 
+          su progreso, compararse con sus pares y entender en tiempo real si está cumpliendo su meta del día. Para quienes prefieren no ver el ranking, 
+          existe el <strong style="color:var(--meli-text)">Modo Foco</strong> 🧘 que muestra solo tu progreso personal.
+        </p>
+      </div>
+
+      <div class="tip-box success">
+        <span class="tip-box-icon">💡</span>
+        <div class="tip-box-content">
+          <h4>¿Por qué es importante?</h4>
+          <p>Permite medir de forma objetiva el uso de herramientas y correlacionar con productividad real. 
+          Los datos muestran que los representantes que usan la extensión consistentemente tienden a tener mejor productividad.</p>
+        </div>
+      </div>
+
+      <!-- QUÉ REGISTRA -->
+      <div class="card">
+        <div class="card-title">📝 ¿Qué registra?</div>
+        <p style="font-size:14px;color:var(--meli-muted);margin-bottom:16px;">Cada vez que registras un caso, la extensión captura automáticamente:</p>
+        <div class="feature-grid">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
+            <span style="font-size:24px;">👤</span><div><div style="font-size:13px;font-weight:700;">Usuario (LDAP)</div><div style="font-size:12px;color:var(--meli-muted);">Tu identificador único</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
+            <span style="font-size:24px;">⏰</span><div><div style="font-size:13px;font-weight:700;">Timestamp</div><div style="font-size:12px;color:var(--meli-muted);">Fecha y hora exacta</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
+            <span style="font-size:24px;">📞</span><div><div style="font-size:13px;font-weight:700;">Tipo (ON/OFF)</div><div style="font-size:12px;color:var(--meli-muted);">Llamada o escrito</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
+            <span style="font-size:24px;">🔢</span><div><div style="font-size:13px;font-weight:700;">Case ID</div><div style="font-size:12px;color:var(--meli-muted);">Número único del caso</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
+            <span style="font-size:24px;">⏱️</span><div><div style="font-size:13px;font-weight:700;">TMC (minutos)</div><div style="font-size:12px;color:var(--meli-muted);">Tiempo medio de contacto</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--meli-dark);border-radius:8px;">
+            <span style="font-size:24px;">👔</span><div><div style="font-size:13px;font-weight:700;">Líder asignado</div><div style="font-size:12px;color:var(--meli-muted);">Tu team leader</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- ========== FEATURES ========== -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">✨ Funcionalidades</div>
+        <h2 class="section-title">Todo lo que necesitas</h2>
+        <p class="section-subtitle">Diseñada por un representante, para representantes</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Registro Instantáneo</div>
+          <div class="feature-text">Registra ON (llamada) u OFF (escrito) con un clic. Incluye Level Up ⭐ para Estilo Meli. El caso se cuenta al instante sin esperar al servidor.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏆</div>
+          <div class="feature-title">Ranking en Tiempo Real</div>
+          <div class="feature-text">Ve cómo va tu equipo con el Top 5 en la pantalla principal o el ranking completo. Actualiza con 🔄 cuando quieras. Filtra por equipo o por turno.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧘</div>
+          <div class="feature-title">Modo Foco</div>
+          <div class="feature-text">Para quienes prefieren concentrarse sin distracciones. Sin ranking, sin comparaciones. Solo tu progreso, tu meta y un mensaje de calma. Un caso a la vez.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Meta Diaria Personalizable</div>
+          <div class="feature-text">Configura tu meta y ve tu progreso en una barra visual con emoji personalizable. Sabe exactamente cuánto te falta para cumplir tu objetivo.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📝</div>
+          <div class="feature-title">Bloc de Notas</div>
+          <div class="feature-text">Anota cosas importantes del día que se borran automáticamente a medianoche. Perfecto para recordatorios rápidos durante el turno.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-title">Personalización Total</div>
+          <div class="feature-text">5 paletas de colores, modo oscuro/claro, colores custom, avatar con 160+ opciones y emoji de progreso personalizable. Hazla tuya.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📜</div>
+          <div class="feature-title">Historial Completo</div>
+          <div class="feature-text">Revisa tus casos de hoy, la semana o cualquier rango personalizado. Filtra por tipo (ON, OFF, Level Up) con paginación inteligente.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <div class="feature-title">Datos Protegidos</div>
+          <div class="feature-text">Tus casos nunca se pierden. La sincronización inteligente nunca resta casos. Protección contra duplicados con confirmación.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CÓMO USARLA ========== -->
+  <section class="section section-alt" id="how-to">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">📋 Guía</div>
+        <h2 class="section-title">Cómo Usarla</h2>
+        <p class="section-subtitle">En 5 pasos estás registrando casos</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Instala la extensión</h3>
+            <p>Descarga Case Counter Pro desde la Chrome Web Store o instálala desde el archivo ZIP proporcionado. Aparecerá el ícono 📊 en tu barra de extensiones.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Inicia sesión</h3>
+            <p>Ingresa el LDAP de tu líder y tu LDAP personal. El sistema validará que estés registrado en el equipo. Solo necesitas hacerlo una vez.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Registra tu caso</h3>
+            <p>Escribe el <strong>Case ID</strong> del caso que gestionaste y el <strong>TMC</strong> (tiempo en minutos). Luego presiona <strong style="color:var(--meli-green)">📞 ON</strong> si fue llamada o <strong style="color:var(--meli-accent)">✉️ OFF</strong> si fue escrito.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Observa tu progreso</h3>
+            <p>La barra de meta se actualiza al instante. El ranking del equipo se actualiza cada 30 segundos o cuando presiones 🔄. Verás tu posición vs tus compañeros.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h3>Personaliza tu experiencia</h3>
+            <p>En ⚙️ Ajustes cambia tu avatar, colores y tema. Si el ranking te genera ansiedad, activa el <strong>Modo Foco</strong> 👁️ desde la barra superior. Usa 📝 para notas rápidas.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box info" style="margin-top:32px;">
+        <span class="tip-box-icon">⌨️</span>
+        <div class="tip-box-content">
+          <h4>Atajo rápido</h4>
+          <p>Presiona <strong>Ctrl + Shift + C</strong> para abrir la extensión al instante desde cualquier pestaña.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECCIÓN 2: DASHBOARD ========== -->
+  <section class="section" id="dashboard">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">📊 Sección 2</div>
+        <h2 class="section-title">El Dashboard</h2>
+        <p class="section-subtitle">Análisis profundo del uso de la extensión y su impacto en la productividad</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🎯 ¿Qué mide?</div>
+        <p style="font-size:15px;color:var(--meli-muted);line-height:1.8;margin-bottom:20px;">
+          El Dashboard cruza los datos de productividad real (cuántos casos gestiona cada representante por día) 
+          con los datos de la extensión (cuántos de esos casos fueron registrados). La métrica principal es:
+        </p>
+        <div style="text-align:center;padding:24px;background:var(--meli-dark);border-radius:var(--radius);margin-bottom:20px;">
+          <div style="font-size:13px;color:var(--meli-muted);margin-bottom:8px;">MÉTRICA PRINCIPAL</div>
+          <div style="font-size:24px;font-weight:900;color:var(--meli-yellow);">Tasa de Uso = Casos Extensión ÷ Casos Cx × 100</div>
+        </div>
+      </div>
+
+      <!-- SEMÁFORO -->
+      <div class="semaforo">
+        <div class="semaforo-item green">
+          <div class="semaforo-emoji">🟢</div>
+          <div class="semaforo-label">En Meta</div>
+          <div class="semaforo-range">≥ 80%</div>
+          <div class="semaforo-desc">Excelente uso de la herramienta</div>
+        </div>
+        <div class="semaforo-item orange">
+          <div class="semaforo-emoji">🟠</div>
+          <div class="semaforo-label">Atención</div>
+          <div class="semaforo-range">40 - 79%</div>
+          <div class="semaforo-desc">Oportunidad de mejora</div>
+        </div>
+        <div class="semaforo-item red">
+          <div class="semaforo-emoji">🔴</div>
+          <div class="semaforo-label">Crítico</div>
+          <div class="semaforo-range">< 40%</div>
+          <div class="semaforo-desc">Requiere acompañamiento</div>
+        </div>
+      </div>
+
+      <!-- 4 TABS -->
+      <div style="margin-top:48px;">
+        <h3 style="font-size:22px;font-weight:800;margin-bottom:24px;text-align:center;">📋 Las 4 Pantallas del Dashboard</h3>
+        <div class="tab-grid">
+          <div class="tab-card">
+            <div class="tab-card-header"><div class="tab-card-number">1</div><div class="tab-card-title">📈 Resumen</div></div>
+            <ul class="tab-card-features">
+              <li>📊 5 KPIs principales</li><li>📈 Tendencia del mes vs meta 80%</li>
+              <li>🏆 Ranking de reps con medallas</li><li>📸 Captura HD para compartir</li>
+              <li>🎯 Productividad por representante</li>
+            </ul>
+          </div>
+          <div class="tab-card">
+            <div class="tab-card-header"><div class="tab-card-number">2</div><div class="tab-card-title">📅 Detalle por Día</div></div>
+            <ul class="tab-card-features">
+              <li>◀▶ Navegador de días</li><li>📋 Tabla detallada por rep</li>
+              <li>📊 Modal Histórico del Mes</li><li>🏅 Comparativa de Líderes</li>
+              <li>🌡️ Celdas con semáforo de color</li>
+            </ul>
+          </div>
+          <div class="tab-card">
+            <div class="tab-card-header"><div class="tab-card-number">3</div><div class="tab-card-title">⚡ Tiempo Real</div></div>
+            <ul class="tab-card-features">
+              <li>🔴 Auto-refresh cada 60 segundos</li><li>🧠 Insights automáticos de actividad</li>
+              <li>📊 Distribución horaria y por canal</li><li>🏆 Ranking del día (Mi Equipo + Todos)</li>
+              <li>⚠️ Alertas de inactividad (30min/1h)</li>
+            </ul>
+          </div>
+          <div class="tab-card">
+            <div class="tab-card-header"><div class="tab-card-number">4</div><div class="tab-card-title">💡 ¿Por qué extensión?</div></div>
+            <ul class="tab-card-features">
+              <li>📊 Análisis por nivel de uso</li><li>🏆 TOP 10 más productivos</li>
+              <li>🧠 Insights automáticos</li><li>📈 Correlación uso ↔ productividad</li>
+              <li>💪 Mensaje motivacional</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-box warning" style="margin-top:32px;">
+        <span class="tip-box-icon">📸</span>
+        <div class="tip-box-content">
+          <h4>Capturas HD</h4>
+          <p>Cada sección del dashboard tiene un botón 📸 que genera una imagen PNG de alta resolución (4x) perfecta para compartir en Slack o en reuniones de equipo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DASHBOARDS EN VIVO ========== -->
+  <section class="section section-alt" id="dashboards-live">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">🚀 Acceso Directo</div>
+        <h2 class="section-title">Dashboards en Vivo</h2>
+        <p class="section-subtitle">Accede directamente a las herramientas de análisis</p>
+      </div>
+
+      <div class="dashboard-links">
+        <a href="https://script.google.com/a/macros/mercadolibre.com.co/s/AKfycbxFM0KNNbSwyVL7Lrf4rW631tT_gPzzLE8WkhCD3YlOlqRokNbiZDi8vskROLZxkShK/exec" target="_blank" class="dashboard-link">
+          <div class="dashboard-link-icon">📋</div>
+          <div class="dashboard-link-title">Dashboard Resumen</div>
+          <div class="dashboard-link-desc">Vista rápida con KPIs principales, ranking de líderes por turno y tasa de uso general del equipo. Ideal para reuniones de seguimiento.</div>
+          <div class="dashboard-link-cta">Abrir Dashboard →</div>
+        </a>
+        <a href="https://script.google.com/a/macros/mercadolibre.com.co/s/AKfycbymiGyX9gRRZM1oge9tY6rR1ohen69BxXAguHpBlViW2NdNxjCFzqfkvF_gMinfQJ1Q/exec" target="_blank" class="dashboard-link">
+          <div class="dashboard-link-icon">📊</div>
+          <div class="dashboard-link-title">Dashboard Completo</div>
+          <div class="dashboard-link-desc">Análisis profundo con 4 pestañas: Resumen, Detalle por Día, Tiempo Real y correlación de uso vs productividad. Incluye capturas HD.</div>
+          <div class="dashboard-link-cta">Abrir Dashboard →</div>
+        </a>
+      </div>
+
+      <div class="tip-box info">
+        <span class="tip-box-icon">🔑</span>
+        <div class="tip-box-content">
+          <h4>Acceso</h4>
+          <p>Los dashboards requieren cuenta de Mercado Libre (@mercadolibre.com.co). Si es tu primera vez, es posible que debas autorizar permisos de Google.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- ========== FAQ ========== -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">❓ Preguntas Frecuentes</div>
+        <h2 class="section-title">FAQ</h2>
+        <p class="section-subtitle">Respuestas a las dudas más comunes</p>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question"><span>¿Se pierden mis casos si cierro la extensión?</span><span class="faq-arrow">▼</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">No. Todos los casos se guardan en Google Sheets y en tu almacenamiento local. La sincronización inteligente garantiza que nunca se resten casos. Tus datos están seguros incluso si cierras y abres la extensión.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question"><span>¿Qué pasa a medianoche?</span><span class="faq-arrow">▼</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Los contadores, el historial del día y las notas se resetean automáticamente a las 00:00. Tus datos históricos permanecen guardados en la hoja principal. Al abrir la extensión en un nuevo día, empiezas en 0 limpio.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question"><span>¿Puedo registrar el mismo caso dos veces?</span><span class="faq-arrow">▼</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Sí, pero la extensión te mostrará un aviso: "Este caso ya fue registrado hoy". Si confirmas, se registra. Esto es útil para casos que requieren múltiples gestiones en el mismo día.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question"><span>¿El ranking me genera ansiedad, qué hago?</span><span class="faq-arrow">▼</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Activa el <strong>Modo Foco</strong> presionando el ícono 👁️ en la barra superior. Verás solo tu progreso personal sin ranking ni comparaciones. Incluye mensajes de calma y una animación de respiración. Un caso a la vez. 🌿</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question"><span>¿Qué es la "Tasa de Uso de Extensión"?</span><span class="faq-arrow">▼</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Es la relación entre los casos que registraste en la extensión vs el total de casos que gestionaste según el sistema de Mercado Libre. La meta es ≥80%. Ejemplo: si gestionaste 10 casos y registraste 8 en la extensión, tu tasa es 80% 🟢.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question"><span>¿Qué significa ON, OFF y Level Up?</span><span class="faq-arrow">▼</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner"><strong>ON (📞)</strong>: Caso gestionado por llamada telefónica.<br><strong>OFF (✉️)</strong>: Caso gestionado por escrito (chat, email, mensaje).<br><strong>Level Up (⭐)</strong>: Caso donde aplicaste "Estilo Meli" — activa el toggle antes de registrar.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question"><span>¿Puedo eliminar un caso registrado por error?</span><span class="faq-arrow">▼</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Sí. Presiona el ícono 🗑️ al lado del campo de registro. Se mostrará el detalle del último caso registrado y podrás confirmar la eliminación. Solo puedes eliminar el último caso del día.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question"><span>¿Quién puede ver mis datos?</span><span class="faq-arrow">▼</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Tu líder de equipo y el supervisor pueden ver los datos del equipo a través del dashboard. El ranking dentro de la extensión es visible solo para los miembros de tu mismo equipo. Los datos se almacenan en Google Sheets con acceso controlado.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question"><span>¿Qué es el periodo de adaptación (ADAPT)?</span><span class="faq-arrow">▼</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Cuando un representante empieza a usar la extensión, se configura una fecha de inicio (FECHA_INICIO_EXT). Los días anteriores a esa fecha aparecen como "ADAPT" en el dashboard y no penalizan tu tasa de uso. Es un período de aprendizaje.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question"><span>¿El dashboard funciona en celular?</span><span class="faq-arrow">▼</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Sí. El dashboard tiene diseño responsive y se adapta a escritorio, tablet y móvil. La extensión de Chrome solo funciona en computador de escritorio o laptop.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer-logo">📊</div>
+    <div class="footer-title">Case Counter Pro v3.3.0</div>
+    <div class="footer-creator">Creado por <strong>Juan Sebastián Guerrero Rodríguez</strong></div>
+    <div class="footer-team">Equipo Publicaciones Mature — Mercado Libre</div>
+    <div class="footer-divider"></div>
+    <div class="footer-team">Supervisor: <strong>Andres Mauricio Martinez Rubiano</strong></div>
+    <div class="footer-team">Equipo: <strong>Envíos Mature</strong></div>
+    <div class="footer-divider"></div>
+    <div class="footer-copy">© 2025-2026 Case Counter Pro. Herramienta interna de Mercado Libre.</div>
+  </footer>
+
+  <!-- ========== JAVASCRIPT ========== -->
+  <script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(function(q) {
+      q.addEventListener('click', function() {
+        var item = q.parentElement;
+        var isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+        // Toggle current
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        var target = document.querySelector(a.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior:'smooth', block:'start' }); }
+      });
+    });
+
+    // Nav background on scroll
+    var nav = document.querySelector('.nav');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 50) nav.style.borderBottomColor = 'rgba(255,230,0,0.1)';
+      else nav.style.borderBottomColor = 'var(--meli-border)';
+    });
+  </script>
+
+</body>
+</html>
